@@ -1,4 +1,5 @@
 using microCommerce.Caching;
+using microCommerce.Common;
 using microCommerce.MongoDb;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,12 +9,15 @@ namespace microCommerce.Localization
     public class LocalizationService : ILocalizationService
     {
         private readonly IMongoRepository<LocalizationResource> _localizationResourceRepository;
+        private readonly IWorkContext _workContext;
         private readonly ICacheManager _cacheManager;
 
         public LocalizationService(IMongoRepository<LocalizationResource> localizationResourceRepository,
+            IWorkContext workContext,
         ICacheManager cacheManager)
         {
             _localizationResourceRepository = localizationResourceRepository;
+            _workContext = workContext;
             _cacheManager = cacheManager;
         }
 
@@ -63,6 +67,11 @@ namespace microCommerce.Localization
         public virtual async Task<IList<LocalizationResource>> GetAllResources(string languageCultureCode)
         {
             return await _localizationResourceRepository.GetAsync(lr => lr.LanguageCultureCode == languageCultureCode);
+        }
+
+        public virtual async Task<string> GetResourceValue(string name, string defaultValue = null, bool setEmptyIfNotFound = false)
+        {
+            return await GetResourceValue(_workContext.CurrentLanguage.LanguageCulture);
         }
 
         public virtual async Task<string> GetResourceValue(string name, string languageCultureCode, string defaultValue = null, bool setEmptyIfNotFound = false)

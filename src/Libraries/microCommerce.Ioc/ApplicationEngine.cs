@@ -38,8 +38,7 @@ namespace microCommerce.Ioc
         {
             //set base application path
             var provider = services.BuildServiceProvider();
-            var hostingEnvironment = provider.GetRequiredService<IHostingEnvironment>();
-            CommonHelper.BaseDirectory = hostingEnvironment.ContentRootPath;
+            CommonHelper.BaseDirectory = provider.GetRequiredService<IHostingEnvironment>().ContentRootPath;
         }
 
         public IServiceProvider RegisterDependencies(IServiceCollection services, IConfigurationRoot configuration)
@@ -49,12 +48,12 @@ namespace microCommerce.Ioc
             //register engine
             containerBuilder.RegisterInstance(this).As<IEngine>().SingleInstance();
 
-            //register assembly helper
-            var assemblyHelper = new AssemblyHelper();
-            containerBuilder.RegisterInstance(assemblyHelper).As<IAssemblyHelper>().SingleInstance();
+            //register assembly finder
+            var assemblyFinder = new AssemblyFinder();
+            containerBuilder.RegisterInstance(assemblyFinder).As<IAssemblyHelper>().SingleInstance();
 
             //find dependency registrars provided by other assemblies
-            var dependencyRegistrars = assemblyHelper.FindOfType<IDependencyRegistrar>();
+            var dependencyRegistrars = assemblyFinder.FindOfType<IDependencyRegistrar>();
 
             //create and sort instances of dependency registrars
             var instances = dependencyRegistrars
@@ -63,13 +62,21 @@ namespace microCommerce.Ioc
 
             //register all provided dependencies
             foreach (var dependencyRegistrar in instances)
-                dependencyRegistrar.Register(containerBuilder, assemblyHelper, configuration);
+                dependencyRegistrar.Register(containerBuilder, assemblyFinder, configuration);
 
             //populate Autofac container builder with the set of registered service descriptors
             containerBuilder.Populate(services);
 
             //return service provider
             _serviceProvider = new AutofacServiceProvider(containerBuilder.Build());
+
+            var startupTasks = assemblyFinder.FindOfType<IStartupTask>();
+            var taskInstances = startupTasks
+                .Select(task => (IStartupTask)Activator.CreateInstance(task))
+                .OrderBy(task => task.Priority);
+
+            foreach (var task in taskInstances)
+                task.Execute();
 
             return _serviceProvider;
         }

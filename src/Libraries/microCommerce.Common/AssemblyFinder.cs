@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace microCommerce.Common
 {
-    public class AssemblyHelper : IAssemblyHelper
+    public class AssemblyFinder : IAssemblyHelper
     {
         /// <summary>
         /// Find classes of type
@@ -51,7 +51,7 @@ namespace microCommerce.Common
         /// <returns>Result</returns>
         public virtual IEnumerable<Type> FindOfType(Type assignTypeFrom, IEnumerable<Assembly> assemblies, bool onlyConcreteClasses = true)
         {
-            var result = new List<Type>();
+            IList<Type> result = new List<Type>();
             try
             {
                 foreach (var a in assemblies)
@@ -61,7 +61,8 @@ namespace microCommerce.Common
                     {
                         foreach (var t in types)
                         {
-                            if (assignTypeFrom.IsAssignableFrom(t) || (assignTypeFrom.IsGenericTypeDefinition && DoesTypeImplementOpenGeneric(t, assignTypeFrom)))
+                            if (assignTypeFrom.IsAssignableFrom(t) ||
+                                (assignTypeFrom.IsGenericTypeDefinition && DoesTypeImplementOpenGeneric(t, assignTypeFrom)))
                             {
                                 if (!t.IsInterface)
                                 {
@@ -84,15 +85,16 @@ namespace microCommerce.Common
             }
             catch (ReflectionTypeLoadException ex)
             {
-                var msg = string.Empty;
-                foreach (var e in ex.LoaderExceptions)
+                string msg = string.Empty;
+                foreach (Exception e in ex.LoaderExceptions)
                     msg += e.Message + Environment.NewLine;
 
-                var fail = new Exception(msg, ex);
+                Exception fail = new Exception(msg, ex);
                 Debug.WriteLine(fail.Message, fail);
 
                 throw fail;
             }
+
             return result;
         }
 
@@ -115,7 +117,7 @@ namespace microCommerce.Common
         {
             try
             {
-                var genericTypeDefinition = openGeneric.GetGenericTypeDefinition();
+                Type genericTypeDefinition = openGeneric.GetGenericTypeDefinition();
                 foreach (var implementedInterface in type.FindInterfaces((objType, objCriteria) => true, null))
                 {
                     if (!implementedInterface.IsGenericType)
@@ -124,6 +126,7 @@ namespace microCommerce.Common
                     var isMatch = genericTypeDefinition.IsAssignableFrom(implementedInterface.GetGenericTypeDefinition());
                     return isMatch;
                 }
+
                 return false;
             }
             catch

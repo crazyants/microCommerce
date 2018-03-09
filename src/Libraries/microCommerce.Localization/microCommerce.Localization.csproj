@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\microCommerce.Caching\microCommerce.Caching.csproj" />
+    <ProjectReference Include="..\microCommerce.Common\microCommerce.Common.csproj" />
     <ProjectReference Include="..\microCommerce.MongoDb\microCommerce.MongoDB.csproj" />
   </ItemGroup>
 

@@ -10,6 +10,7 @@ namespace microCommerce.Localization
         Task DeleteLocalizationResource(string name, string languageCultureCode);
         Task<LocalizationResource> GetLocalizationResourceByName(string name, string languageCultureCode);
         Task<IList<LocalizationResource>> GetAllResources(string languageCultureCode);
+        Task<string> GetResourceValue(string name, string defaultValue = null, bool setEmptyIfNotFound = false);
         Task<string> GetResourceValue(string name, string languageCultureCode, string defaultValue = null, bool setEmptyIfNotFound = false);
     }
 }

@@ -1,18 +1,10 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using microCommerce.Common;
-using microCommerce.Ioc;
+﻿using microCommerce.Ioc;
 using microCommerce.Mvc.Configurations;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 
 namespace microCommerce.Mvc.Builders
 {
