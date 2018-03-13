@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using microCommerce.Common;
+using microCommerce.Common.Configurations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -41,7 +42,7 @@ namespace microCommerce.Ioc
             CommonHelper.BaseDirectory = provider.GetRequiredService<IHostingEnvironment>().ContentRootPath;
         }
 
-        public IServiceProvider RegisterDependencies(IServiceCollection services, IConfigurationRoot configuration)
+        public IServiceProvider RegisterDependencies(IServiceCollection services, IConfigurationRoot configuration, IAppConfiguration config)
         {
             var containerBuilder = new ContainerBuilder();
 
@@ -62,7 +63,7 @@ namespace microCommerce.Ioc
 
             //register all provided dependencies
             foreach (var dependencyRegistrar in instances)
-                dependencyRegistrar.Register(containerBuilder, assemblyFinder, configuration);
+                dependencyRegistrar.Register(containerBuilder, assemblyFinder, configuration, config);
 
             //populate Autofac container builder with the set of registered service descriptors
             containerBuilder.Populate(services);

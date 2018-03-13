@@ -10,13 +10,17 @@ namespace microCommerce.MongoDb
 {
     public class MongoRepository<T> : IMongoRepository<T> where T : MongoEntity
     {
+        #region Fields
         private readonly IMongoDbContext _context;
         private IMongoCollection<T> _document;
+        #endregion
 
+        #region Ctor
         public MongoRepository(IMongoDbContext context)
         {
             _context = context;
         }
+        #endregion
 
         #region Properties
         protected IMongoCollection<T> Document
@@ -24,7 +28,10 @@ namespace microCommerce.MongoDb
             get
             {
                 if (_document == null)
-                    _document = _context.Collection<T>();
+                {
+                    var database = _context.GetDatabase();
+                    _document = database.GetCollection<T>(typeof(T).Name);
+                }
 
                 return _document;
             }

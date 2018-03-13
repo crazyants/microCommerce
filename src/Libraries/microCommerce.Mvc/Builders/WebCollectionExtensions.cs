@@ -1,5 +1,5 @@
 ﻿using microCommerce.Ioc;
-using microCommerce.Mvc.Configurations;
+using microCommerce.Common.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +13,7 @@ namespace microCommerce.Mvc.Builders
         public static IServiceProvider ConfigureServices(this IServiceCollection services, IConfigurationRoot configuration)
         {
             //add application configuration parameters
-            services.ConfigureStartupConfig<WebConfiguration>(configuration.GetSection("Application"));
+            var config = services.ConfigureStartupConfig<WebConfiguration>(configuration.GetSection("Application"));
             //add hosting configuration parameters
             services.ConfigureStartupConfig<HostingConfiguration>(configuration.GetSection("Hosting"));
 
@@ -37,7 +37,7 @@ namespace microCommerce.Mvc.Builders
             services.AddCustomHttpSession();
 
             //register dependencies
-            return engine.RegisterDependencies(services, configuration);
+            return engine.RegisterDependencies(services, configuration, config);
         }
 
         /// <summary>

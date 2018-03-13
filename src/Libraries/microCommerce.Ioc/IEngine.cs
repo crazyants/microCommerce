@@ -1,3 +1,4 @@
+using microCommerce.Common.Configurations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,7 +19,7 @@ namespace microCommerce.Ioc
         /// </summary>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
-        IServiceProvider RegisterDependencies(IServiceCollection services, IConfigurationRoot configuration);
+        IServiceProvider RegisterDependencies(IServiceCollection services, IConfigurationRoot configuration, IAppConfiguration config);
 
         /// <summary>
         /// Resolve dependency

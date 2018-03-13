@@ -1,5 +1,5 @@
 ﻿using microCommerce.Ioc;
-using microCommerce.Mvc.Configurations;
+using microCommerce.Common.Configurations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 

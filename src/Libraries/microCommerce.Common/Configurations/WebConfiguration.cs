@@ -1,24 +1,19 @@
-﻿namespace microCommerce.Mvc.Configurations
+﻿namespace microCommerce.Common.Configurations
 {
-    public class ServiceConfiguration : IAppConfiguration
+    public class WebConfiguration : IAppConfiguration
     {
         /// <summary>
-        /// Gets or sets the application name
+        /// Gets or sets path to database with user agent strings
         /// </summary>
-        public string ApplicationName { get; set; }
+        public string UserAgentFilePath { get; set; }
 
         /// <summary>
-        /// Gets or sets the aplication description
+        /// Gets or sets path to database with crawler only user agent strings
         /// </summary>
-        public string ApplicationDescription { get; set; }
+        public string CrawlerOnlyUserAgentFilePath { get; set; }
 
         /// <summary>
-        /// Gets or sets the api current working version
-        /// </summary>
-        public int CurrentVersion { get; set; }
-
-        /// <summary>
-        /// Gets or sets data caching enabled
+        /// Gets or sets data caching enabled for database performance
         /// </summary>
         public bool CachingEnabled { get; set; }
 
@@ -43,12 +38,12 @@
         public bool LoggingEnabled { get; set; }
 
         /// <summary>
-        /// Use nosql for logging
+        /// Use no sql for logging
         /// </summary>
         public bool UseNoSqlLogging { get; set; }
 
         /// <summary>
-        /// Gets or sets nosql connection string
+        /// Gets or sets no sql connection string
         /// </summary>
         public string NoSqlConnectionString { get; set; }
     }

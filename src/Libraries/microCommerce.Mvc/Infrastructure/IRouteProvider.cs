@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Routing;
 
-namespace microCommerce.Mvc
+namespace microCommerce.Mvc.Infrastructure
 {
     public interface IRouteProvider
     {

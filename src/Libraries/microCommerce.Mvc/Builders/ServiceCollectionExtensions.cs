@@ -1,5 +1,5 @@
-﻿using microCommerce.Ioc;
-using microCommerce.Mvc.Configurations;
+﻿using microCommerce.Common.Configurations;
+using microCommerce.Ioc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,15 +26,22 @@ namespace microCommerce.Mvc.Builders
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             //add mvc engine
-            services.AddMvcCore().AddApiExplorer();
+            var mvcBuilder = services.AddMvcCore();
+
+            //add json serializer
+            mvcBuilder.AddJsonFormatters();
+
+            //add api explorer for swagger
+            mvcBuilder.AddApiExplorer();
 
             //add accessor to HttpContext
             services.AddHttpContextAccessor();
 
+            //add swagger
             services.AddCustomizedSwagger(config);
 
             //register dependencies
-            var serviceProvider = engine.RegisterDependencies(services, configuration);
+            var serviceProvider = engine.RegisterDependencies(services, configuration, config);
 
             return serviceProvider;
         }

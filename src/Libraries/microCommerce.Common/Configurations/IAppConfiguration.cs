@@ -1,4 +1,4 @@
-﻿namespace microCommerce.Mvc.Configurations
+﻿namespace microCommerce.Common.Configurations
 {
     public interface IAppConfiguration
     {

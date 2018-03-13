@@ -1,33 +1,66 @@
 ﻿using MongoDB.Driver;
+using System;
 
 namespace microCommerce.MongoDb
 {
     public class MongoDbContext : IMongoDbContext
     {
+        #region Fields
+        private readonly Lazy<string> _connectionString;
+        private volatile string _databaseName;
+        private volatile IMongoClient _client;
+        private volatile IMongoDatabase _database;
+        private readonly object _lock = new object();
+        #endregion
+
+        public MongoDbContext(string connectionString)
+        {
+            _connectionString = new Lazy<string>(connectionString);
+        }
+
+        /// <summary>
+        /// Gets the mongodb database
+        /// </summary>
+        /// <returns></returns>
+        public virtual IMongoDatabase GetDatabase()
+        {
+            if (_client != null && _database != null) return _database;
+
+            lock (_lock)
+            {
+                if (_client != null && _database != null) return _database;
+
+                var mongoUrl = MongoUrl.Create(_connectionString.Value);
+                _client = new MongoClient(mongoUrl);
+                _database = _client.GetDatabase(mongoUrl.DatabaseName);
+                _databaseName = mongoUrl.DatabaseName;
+            }
+
+            return _database;
+        }
+
+        #region Properties
         /// <summary>
         /// Get connection string from Mongo Client
         /// </summary>
-        public string ConnectionString { get; private set; }
+        public string ConnectionString
+        {
+            get
+            {
+                return _connectionString.Value;
+            }
+        }
 
         /// <summary>
         /// Get database name from Mongo Client
         /// </summary>
-        public string DatabaseName { get; private set; }
-        
-        private IMongoClient client;
-        private IMongoDatabase database;
-        
-        public MongoDbContext(string connectionString)
+        public string DatabaseName
         {
-            ConnectionString = connectionString;
-            DatabaseName = MongoUrl.Create(ConnectionString).DatabaseName;
-            client = new MongoClient(ConnectionString);
-            database = client.GetDatabase(DatabaseName);
+            get
+            {
+                return _databaseName;
+            }
         }
-
-        public IMongoCollection<T> Collection<T>() where T : MongoEntity
-        {
-            return database.GetCollection<T>(typeof(T).Name);
-        }
+        #endregion
     }
 }

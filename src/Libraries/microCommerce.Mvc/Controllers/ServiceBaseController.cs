@@ -10,6 +10,7 @@ namespace microCommerce.Mvc.Controllers
         {
             var serializerSettings = new JsonSerializerSettings
             {
+                DateFormatHandling = DateFormatHandling.IsoDateFormat,
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 Formatting = Formatting.Indented,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore

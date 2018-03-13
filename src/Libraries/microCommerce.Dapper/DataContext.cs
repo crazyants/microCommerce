@@ -11,15 +11,19 @@ namespace microCommerce.Dapper
 {
     public partial class DataContext : IDataContext, IDisposable
     {
+        #region Fields
         private readonly IProvider _provider;
         private readonly IDbConnection _connection;
         private readonly int _executionTimeOut = 30;
+        #endregion
 
+        #region Ctor
         public DataContext(IProvider provider, IDbConnection connection)
         {
             _provider = provider;
             _connection = connection;
         }
+        #endregion
 
         #region Utilities
         /// <summary>
@@ -75,6 +79,7 @@ namespace microCommerce.Dapper
         }
         #endregion
 
+        #region Methods
         /// <summary>
         /// Begin transcation scope
         /// </summary>
@@ -93,7 +98,9 @@ namespace microCommerce.Dapper
                 (_connection.State != ConnectionState.Open || _connection.State != ConnectionState.Connecting))
                 _connection.Open();
         }
+        #endregion
 
+        #region Properties
         /// <summary>
         /// Gets the current connection
         /// </summary>
@@ -125,5 +132,6 @@ namespace microCommerce.Dapper
             if (_connection != null)
                 _connection.Dispose();
         }
+        #endregion
     }
 }

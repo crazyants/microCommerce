@@ -10,28 +10,15 @@ namespace microCommerce.Redis
     public class RedisCacheManager : IStaticCacheManager
     {
         #region Fields
-
         private readonly IStaticCacheManager _perRequestCacheManager;
         private readonly IRedisConnectionWrapper _connectionWrapper;
         private readonly IDatabase _database;
-
         #endregion
 
         #region Ctor
-
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        /// <param name="perRequestCacheManager">Cache manager</param>
-        /// <param name="connectionWrapper">ConnectionW wrapper</param>
-        /// <param name="config">Config</param>
         public RedisCacheManager(IStaticCacheManager perRequestCacheManager,
-            IRedisConnectionWrapper connectionWrapper,
-            string connectionString)
+            IRedisConnectionWrapper connectionWrapper)
         {
-            if (string.IsNullOrEmpty(connectionString))
-                throw new Exception("Redis connection string is empty");
-
             _perRequestCacheManager = perRequestCacheManager;
 
             // ConnectionMultiplexer.Connect should only be called once and shared between callers
@@ -39,11 +26,9 @@ namespace microCommerce.Redis
 
             _database = _connectionWrapper.GetDatabase();
         }
-
         #endregion
 
         #region Utilities
-
         /// <summary>
         /// Gets or sets the value associated with the specified key.
         /// </summary>
@@ -169,11 +154,9 @@ namespace microCommerce.Redis
                 await _database.KeyDeleteAsync(keys.ToArray());
             }
         }
-
         #endregion
 
         #region Methods
-
         /// <summary>
         /// Gets or sets the value associated with the specified key.
         /// </summary>
@@ -238,7 +221,6 @@ namespace microCommerce.Redis
         public virtual void Dispose()
         {
         }
-
         #endregion
     }
 }

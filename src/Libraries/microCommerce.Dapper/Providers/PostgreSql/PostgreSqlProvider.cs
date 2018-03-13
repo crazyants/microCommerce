@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using microCommerce.Domain;
 using Npgsql;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
 
 namespace microCommerce.Dapper.Providers.PostgreSql
 {
@@ -28,7 +25,6 @@ namespace microCommerce.Dapper.Providers.PostgreSql
         #endregion
 
         #region Methods
-
         public virtual IDbConnection CreateConnection(string connectionString)
         {
             return new NpgsqlConnection(connectionString);
