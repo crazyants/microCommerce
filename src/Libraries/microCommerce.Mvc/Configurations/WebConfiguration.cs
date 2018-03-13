@@ -3,11 +3,6 @@
     public class WebConfiguration : IAppConfiguration
     {
         /// <summary>
-        /// Gets or sets a value indicating whether we compress response
-        /// </summary>
-        public bool UseResponseCompression { get; set; }
-
-        /// <summary>
         /// Gets or sets path to database with user agent strings
         /// </summary>
         public string UserAgentFilePath { get; set; }
@@ -31,6 +26,11 @@
         /// Gets or sets redis connection string
         /// </summary>
         public string RedisConnectionString { get; set; }
+
+        /// <summary>
+        /// Gets or sets redis persist data proctection key
+        /// </summary>
+        public string PersistDataProtectionKeys { get; set; }
 
         /// <summary>
         /// Logging error, info, warning messages enabled

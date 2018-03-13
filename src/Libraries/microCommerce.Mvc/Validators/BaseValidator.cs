@@ -2,7 +2,7 @@
 
 namespace microCommerce.Mvc.Validators
 {
-    public abstract class BaseValidator<T> : AbstractValidator<T> where T : class
+    public abstract class BaseValidator<T> : AbstractValidator<T> where T : BaseModel
     {
         /// <summary>
         /// Ctor

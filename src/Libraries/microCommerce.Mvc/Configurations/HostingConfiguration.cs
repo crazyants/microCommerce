@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace microCommerce.Mvc.Configurations
+﻿namespace microCommerce.Mvc.Configurations
 {
-    public class HostingConfiguration : IAppConfiguration
+    public class HostingConfiguration
     {
         /// <summary>
         /// Gets or sets custom forwarded HTTP header (e.g. CF-Connecting-IP, X-FORWARDED-PROTO, etc)
@@ -20,5 +16,10 @@ namespace microCommerce.Mvc.Configurations
         /// Gets or sets a value indicating whether to use HTTP_X_FORWARDED_PROTO
         /// </summary>
         public bool UseHttpXForwardedProto { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether we compress response
+        /// </summary>
+        public bool UseResponseCompression { get; set; }
     }
 }

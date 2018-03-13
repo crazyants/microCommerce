@@ -3,6 +3,7 @@ using microCommerce.Mvc.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Net;
 
@@ -13,7 +14,7 @@ namespace microCommerce.Mvc.Builders
         public static IServiceProvider ConfigureApiServices(this IServiceCollection services, IConfigurationRoot configuration)
         {
             //add application configuration parameters
-            services.ConfigureStartupConfig<ServiceConfiguration>(configuration.GetSection("Service"));
+            var config = services.ConfigureStartupConfig<ServiceConfiguration>(configuration.GetSection("Service"));
             //add hosting configuration parameters
             services.ConfigureStartupConfig<HostingConfiguration>(configuration.GetSection("Hosting"));
 
@@ -25,13 +26,41 @@ namespace microCommerce.Mvc.Builders
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             //add mvc engine
-            services.AddMvcCore();
+            services.AddMvcCore().AddApiExplorer();
 
             //add accessor to HttpContext
             services.AddHttpContextAccessor();
 
+            services.AddCustomizedSwagger(config);
+
             //register dependencies
-            return engine.RegisterDependencies(services, configuration);
+            var serviceProvider = engine.RegisterDependencies(services, configuration);
+
+            return serviceProvider;
+        }
+
+        private static void AddCustomizedSwagger(this IServiceCollection services, ServiceConfiguration config)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                string currentVersion = string.Format("v{0}", config.CurrentVersion);
+                c.SwaggerDoc(currentVersion, new Info
+                {
+                    Title = config.ApplicationName,
+                    Version = currentVersion,
+                    Description = config.ApplicationDescription,
+                    Contact = new Contact
+                    {
+                        Email = "info@microcommerce.org",
+                        Url = "https://github.com/fsefacan/microCommerce"
+                    },
+                    License = new License
+                    {
+                        Name = "MIT License",
+                        Url = "https://github.com/fsefacan/microCommerce/blob/master/LICENSE"
+                    }
+                });
+            });
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace microCommerce.Mvc.Builders
         public static IServiceProvider ConfigureServices(this IServiceCollection services, IConfigurationRoot configuration)
         {
             //add application configuration parameters
-            services.ConfigureStartupConfig<WebConfiguration>(configuration.GetSection("App"));
+            services.ConfigureStartupConfig<WebConfiguration>(configuration.GetSection("Application"));
             //add hosting configuration parameters
             services.ConfigureStartupConfig<HostingConfiguration>(configuration.GetSection("Hosting"));
 
