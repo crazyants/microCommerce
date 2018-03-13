@@ -1,7 +1,8 @@
-version: "3.5"
+version: '3.3'
 
 services:
     front.web:
+        image: microCommerce/front.web:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5100
@@ -13,7 +14,11 @@ services:
             - media.api
         ports:
             - "5100:5100"
+        networks:
+            - fontend
+
     admin.web:
+        image: microCommerce/admin.web:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5200
@@ -25,8 +30,11 @@ services:
             - media.api
         ports:
             - "5200:5200"
+        networks:
+            - fontend
 
     basket.api:
+        image: microCommerce/basket.api:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5300
@@ -35,8 +43,11 @@ services:
             dockerfile: Services/microCommerce.BasketApi/Dockerfile
         ports:
             - "5300:5300"
+        networks:
+            - fontend
  
     category.api:
+        image: microCommerce/category.api:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5301
@@ -45,8 +56,11 @@ services:
             dockerfile: Services/microCommerce.CategoryApi/Dockerfile
         ports:
             - "5301:5301"
+        networks:
+            - fontend
  
     checkout.api:
+        image: microCommerce/checkout.api:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5302
@@ -55,8 +69,11 @@ services:
             dockerfile: Services/microCommerce.CheckoutApi/Dockerfile
         ports:
             - "5302:5302"
+        networks:
+            - fontend
 
     customer.api:
+        image: microCommerce/customer.api:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5303
@@ -65,8 +82,11 @@ services:
             dockerfile: Services/microCommerce.CustomerApi/Dockerfile
         ports:
             - "5303:5303"
+        networks:
+            - fontend
 
     directory.api:
+        image: microCommerce/directory.api:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5304
@@ -75,18 +95,24 @@ services:
             dockerfile: Services/microCommerce.DirectoryApi/Dockerfile
         ports:
             - "5304:5304"
+        networks:
+            - fontend
 
     geolocation.api:
+        image: microCommerce/geolocation.api:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5304
         build:
             context: .
-            dockerfile: Services/microCommerce.GeloLocationApi/Dockerfile
+            dockerfile: Services/microCommerce.GeoLocationApi/Dockerfile
         ports:
             - "5304:5304"
+        networks:
+            - fontend
 
     media.api:
+        image: microCommerce/media.api:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5305
@@ -95,8 +121,11 @@ services:
             dockerfile: Services/microCommerce.MediaApi/Dockerfile
         ports:
             - "5305:5305"
+        networks:
+            - fontend
 
     order.api:
+        image: microCommerce/order.api:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5306
@@ -105,8 +134,11 @@ services:
             dockerfile: Services/microCommerce.OrderApi/Dockerfile
         ports:
             - "5306:5306"
+        networks:
+            - fontend
 
     product.api:
+        image: microCommerce/product.api:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5307
@@ -115,8 +147,11 @@ services:
             dockerfile: Services/microCommerce.ProductApi/Dockerfile
         ports:
             - "5307:5307"
+        networks:
+            - fontend
             
     shipping.api:
+        image: microCommerce/shipping.api:${TAG:-latest}
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5307
@@ -125,3 +160,21 @@ services:
             dockerfile: Services/microCommerce.ShippingApi/Dockerfile
         ports:
             - "5307:5307"
+        networks:
+            - fontend
+
+    nosql.data:
+        image: mongo:latest
+        networks:
+            - fontend
+
+    rabbitmq:
+        image: rabbitmq:3-management-alpine
+        networks:
+            - fontend
+
+    networks:
+        frontend:
+            driver: bridge
+        backend:
+            driver: bridge

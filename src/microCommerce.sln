@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.Logging", "Li
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.Module.Core", "Libraries\microCommerce.Module.Core\microCommerce.Module.Core.csproj", "{A8E0C9DB-D524-4987-8A15-0CDA84450507}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.MongoDB", "Libraries\microCommerce.MongoDb\microCommerce.MongoDB.csproj", "{40D14890-F646-40C2-A178-CC592A801FDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.MongoDb", "Libraries\microCommerce.MongoDb\microCommerce.MongoDb.csproj", "{40D14890-F646-40C2-A178-CC592A801FDE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.Mvc", "Libraries\microCommerce.Mvc\microCommerce.Mvc.csproj", "{B7ECFD8D-E3B8-4F78-916D-CE26F67CCB30}"
 EndProject
