@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 
-namespace microCommerce.Web.Infrastructure
+namespace microCommerce.Admin.Infrastructure
 {
     public class RouteProvider : IRouteProvider
     {

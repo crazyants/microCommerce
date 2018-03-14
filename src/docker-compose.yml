@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
     front.web:
-        image: microCommerce/front.web:${TAG:-latest}
+        container_name: microCommerce_web
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5100
@@ -10,15 +10,23 @@ services:
             context: .
             dockerfile: Presentations/microCommerce.Web/Dockerfile
         depends_on:
-            - customer.api
+            - category.api
+            - product.api
             - media.api
+            - customer.api
+            - geolocation.api
+            - directory.api
+            - basket.api
+            - checkout.api
+            - order.api
+            - shipping.api
         ports:
             - "5100:5100"
         networks:
-            - fontend
+            - frontend
 
     admin.web:
-        image: microCommerce/admin.web:${TAG:-latest}
+        container_name: microCommerce_admin
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5200
@@ -26,67 +34,86 @@ services:
             context: .
             dockerfile: Presentations/microCommerce.Admin/Dockerfile
         depends_on:
-            - customer.api
+            - category.api
+            - product.api
             - media.api
+            - customer.api
+            - directory.api
+            - basket.api
+            - order.api
+            - shipping.api
         ports:
             - "5200:5200"
         networks:
-            - fontend
+            - frontend
+            - backend
 
     basket.api:
-        image: microCommerce/basket.api:${TAG:-latest}
+        container_name: microCommerce_basket_api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5300
         build:
             context: .
             dockerfile: Services/microCommerce.BasketApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5300:5300"
         networks:
-            - fontend
+            - frontend
  
     category.api:
-        image: microCommerce/category.api:${TAG:-latest}
+        container_name: microCommerce_category_api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5301
         build:
             context: .
             dockerfile: Services/microCommerce.CategoryApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5301:5301"
         networks:
-            - fontend
+            - frontend
  
     checkout.api:
-        image: microCommerce/checkout.api:${TAG:-latest}
+        container_name: microCommerce_checkout_api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5302
         build:
             context: .
             dockerfile: Services/microCommerce.CheckoutApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5302:5302"
         networks:
-            - fontend
+            - frontend
 
     customer.api:
-        image: microCommerce/customer.api:${TAG:-latest}
+        container_name: microCommerce_customer_api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5303
         build:
             context: .
             dockerfile: Services/microCommerce.CustomerApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5303:5303"
         networks:
-            - fontend
+            - frontend
 
     directory.api:
-        image: microCommerce/directory.api:${TAG:-latest}
+        container_name: microCommerce_directory_api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5304
@@ -96,85 +123,129 @@ services:
         ports:
             - "5304:5304"
         networks:
-            - fontend
+            - frontend
 
     geolocation.api:
-        image: microCommerce/geolocation.api:${TAG:-latest}
-        environment:
-            - ASPNETCORE_ENVIRONMENT=Development
-            - ASPNETCORE_URLS=http://*:5304
-        build:
-            context: .
-            dockerfile: Services/microCommerce.GeoLocationApi/Dockerfile
-        ports:
-            - "5304:5304"
-        networks:
-            - fontend
-
-    media.api:
-        image: microCommerce/media.api:${TAG:-latest}
+        container_name: microCommerce_geolocation_api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5305
         build:
             context: .
-            dockerfile: Services/microCommerce.MediaApi/Dockerfile
+            dockerfile: Services/microCommerce.GeoLocationApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5305:5305"
         networks:
-            - fontend
+            - frontend
 
-    order.api:
-        image: microCommerce/order.api:${TAG:-latest}
+    media.api:
+        container_name: microCommerce_media_api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5306
         build:
             context: .
-            dockerfile: Services/microCommerce.OrderApi/Dockerfile
+            dockerfile: Services/microCommerce.MediaApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5306:5306"
         networks:
-            - fontend
+            - frontend
 
-    product.api:
-        image: microCommerce/product.api:${TAG:-latest}
+    order.api:
+        container_name: microCommerce_order_api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ASPNETCORE_URLS=http://*:5307
+        build:
+            context: .
+            dockerfile: Services/microCommerce.OrderApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
+        ports:
+            - "5307:5307"
+        networks:
+            - frontend
+
+    product.api:
+        container_name: microCommerce_product_api
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://*:5308
         build:
             context: .
             dockerfile: Services/microCommerce.ProductApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
-            - "5307:5307"
+            - "5308:5308"
         networks:
-            - fontend
+            - frontend
             
     shipping.api:
-        image: microCommerce/shipping.api:${TAG:-latest}
+        container_name: microCommerce_shipping_api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - ASPNETCORE_URLS=http://*:5307
+            - ASPNETCORE_URLS=http://*:5309
         build:
             context: .
             dockerfile: Services/microCommerce.ShippingApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
-            - "5307:5307"
+            - "5309:5309"
         networks:
-            - fontend
+            - frontend
 
-    nosql.data:
-        image: mongo:latest
-        networks:
-            - fontend
+    # nosql.data:
+    #     image: mongo:latest
+    #     networks:
+    #         - frontend
 
-    rabbitmq:
-        image: rabbitmq:3-management-alpine
-        networks:
-            - fontend
+    # rabbitmq:
+    #     image: rabbitmq:3-management-alpine
+    #     environment:
+    #         RABBITMQ_DEFAULT_USER: "rabbitmq"
+    #         RABBITMQ_DEFAULT_PASS: "rabbitmq"
+    #         RABBITMQ_DEFAULT_VHOST: "/"
+    #     ports:
+    #          - "15672:15672"
+    #         - "5672:5672"
+    #     networks:
+    #         - frontend
 
-    networks:
-        frontend:
-            driver: bridge
-        backend:
-            driver: bridge
+    # elasticsearch:
+    #     image: elasticsearch
+    #     ports:
+    #         - 9200:9200
+    #     networks:
+    #         - frontend
+    
+    # redis.cache:
+    #     image: redis
+    #     environment:
+    #       - ALLOW_EMPTY_PASSWORD=yes
+    #       - REDIS_URL=redis://redis_db:6379
+    #     ports:
+    #       - "6379:6379"
+    #     networks:
+    #         - frontend
+
+    nginx:
+        build: ../proxy
+        ports:
+            - "80:80"
+
+networks:
+    frontend:
+        driver: bridge
+    backend:
+        driver: bridge

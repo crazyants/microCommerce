@@ -32,7 +32,7 @@ namespace microCommerce.Mvc.Builders
             app.UseCustomPageNotFound();
 
             //set culture by user data
-            app.UseCulture();
+            //app.UseCulture();
         }
 
         private static void RegisterRoutes(IRouteBuilder routeBuilder)

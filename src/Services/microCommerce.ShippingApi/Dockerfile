@@ -1,6 +1,6 @@
 ﻿FROM microsoft/aspnetcore AS base
 WORKDIR /app
-EXPOSE 5100
+EXPOSE 5309
 
 FROM microsoft/aspnetcore-build AS build
 WORKDIR /src
@@ -15,4 +15,4 @@ RUN dotnet publish --no-restore -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "microCommerce.Shipping.dll"]
+ENTRYPOINT ["dotnet", "microCommerce.ShippingApi.dll"]
