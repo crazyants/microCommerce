@@ -56,9 +56,9 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.BasketApi/Dockerfile
-        # depends_on:
-        #     - redis.cache
-        #     - nosql.data
+        depends_on:
+            - redis.cache
+            - nosql.data
         ports:
             - "5300:5300"
         networks:
@@ -72,9 +72,9 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.CategoryApi/Dockerfile
-        # depends_on:
-        #     - redis.cache
-        #     - nosql.data
+        depends_on:
+            - redis.cache
+            - nosql.data
         ports:
             - "5301:5301"
         networks:
@@ -88,9 +88,9 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.CheckoutApi/Dockerfile
-        # depends_on:
-        #     - redis.cache
-        #     - nosql.data
+        depends_on:
+            - redis.cache
+            - nosql.data
         ports:
             - "5302:5302"
         networks:
@@ -104,9 +104,9 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.CustomerApi/Dockerfile
-        # depends_on:
-        #     - redis.cache
-        #     - nosql.data
+        depends_on:
+            - redis.cache
+            - nosql.data
         ports:
             - "5303:5303"
         networks:
@@ -133,9 +133,9 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.GeoLocationApi/Dockerfile
-        # depends_on:
-        #     - redis.cache
-        #     - nosql.data
+        depends_on:
+            - redis.cache
+            - nosql.data
         ports:
             - "5305:5305"
         networks:
@@ -149,9 +149,9 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.MediaApi/Dockerfile
-        # depends_on:
-        #     - redis.cache
-        #     - nosql.data
+        depends_on:
+            - redis.cache
+            - nosql.data
         ports:
             - "5306:5306"
         networks:
@@ -165,9 +165,9 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.OrderApi/Dockerfile
-        # depends_on:
-        #     - redis.cache
-        #     - nosql.data
+        depends_on:
+            - redis.cache
+            - nosql.data
         ports:
             - "5307:5307"
         networks:
@@ -181,9 +181,9 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.ProductApi/Dockerfile
-        # depends_on:
-        #     - redis.cache
-        #     - nosql.data
+        depends_on:
+            - redis.cache
+            - nosql.data
         ports:
             - "5308:5308"
         networks:
@@ -197,18 +197,24 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.ShippingApi/Dockerfile
-        # depends_on:
-        #     - redis.cache
-        #     - nosql.data
+        depends_on:
+            - redis.cache
+            - nosql.data
         ports:
             - "5309:5309"
         networks:
             - frontend
 
-    # nosql.data:
-    #     image: mongo:latest
-    #     networks:
-    #         - frontend
+    nosql.data:
+        image: mongo:latest
+        environment:
+          - MONGO_DATA_DIR=/data/db
+          - MONGO_LOG_DIR=/dev/null
+          - MONGO_URL=mongo://mongo_db:27017
+        ports:
+            - "27017:27017"
+        networks:
+            - frontend
 
     # rabbitmq:
     #     image: rabbitmq:3-management-alpine
@@ -217,7 +223,7 @@ services:
     #         RABBITMQ_DEFAULT_PASS: "rabbitmq"
     #         RABBITMQ_DEFAULT_VHOST: "/"
     #     ports:
-    #          - "15672:15672"
+    #         - "15672:15672"
     #         - "5672:5672"
     #     networks:
     #         - frontend
@@ -225,22 +231,24 @@ services:
     # elasticsearch:
     #     image: elasticsearch
     #     ports:
-    #         - 9200:9200
+    #         - "9200:9200"
     #     networks:
     #         - frontend
     
-    # redis.cache:
-    #     image: redis
-    #     environment:
-    #       - ALLOW_EMPTY_PASSWORD=yes
-    #       - REDIS_URL=redis://redis_db:6379
-    #     ports:
-    #       - "6379:6379"
-    #     networks:
-    #         - frontend
+    redis.cache:
+        image: redis
+        environment:
+          - ALLOW_EMPTY_PASSWORD=yes
+          - REDIS_URL=redis://redis_db:6379
+        ports:
+          - "6379:6379"
+        networks:
+            - frontend
 
-    nginx:
+    proxy:
         build: ../proxy
+        depends_on:
+            - front.web
         ports:
             - "80:80"
 
