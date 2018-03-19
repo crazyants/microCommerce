@@ -22,8 +22,6 @@ services:
             - shipping.api
         ports:
             - "5100:5100"
-        networks:
-            - frontend
 
     admin.web:
         container_name: microCommerce_admin
@@ -44,9 +42,6 @@ services:
             - shipping.api
         ports:
             - "5200:5200"
-        networks:
-            - frontend
-            - backend
 
     basket.api:
         container_name: microCommerce_basket_api
@@ -56,13 +51,11 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.BasketApi/Dockerfile
-        depends_on:
-            - redis.cache
-            - nosql.data
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5300:5300"
-        networks:
-            - frontend
  
     category.api:
         container_name: microCommerce_category_api
@@ -72,13 +65,11 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.CategoryApi/Dockerfile
-        depends_on:
-            - redis.cache
-            - nosql.data
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5301:5301"
-        networks:
-            - frontend
  
     checkout.api:
         container_name: microCommerce_checkout_api
@@ -88,13 +79,11 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.CheckoutApi/Dockerfile
-        depends_on:
-            - redis.cache
-            - nosql.data
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5302:5302"
-        networks:
-            - frontend
 
     customer.api:
         container_name: microCommerce_customer_api
@@ -104,13 +93,11 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.CustomerApi/Dockerfile
-        depends_on:
-            - redis.cache
-            - nosql.data
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5303:5303"
-        networks:
-            - frontend
 
     directory.api:
         container_name: microCommerce_directory_api
@@ -120,10 +107,11 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.DirectoryApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5304:5304"
-        networks:
-            - frontend
 
     geolocation.api:
         container_name: microCommerce_geolocation_api
@@ -133,13 +121,11 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.GeoLocationApi/Dockerfile
-        depends_on:
-            - redis.cache
-            - nosql.data
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5305:5305"
-        networks:
-            - frontend
 
     media.api:
         container_name: microCommerce_media_api
@@ -149,13 +135,11 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.MediaApi/Dockerfile
-        depends_on:
-            - redis.cache
-            - nosql.data
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5306:5306"
-        networks:
-            - frontend
 
     order.api:
         container_name: microCommerce_order_api
@@ -165,13 +149,11 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.OrderApi/Dockerfile
-        depends_on:
-            - redis.cache
-            - nosql.data
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5307:5307"
-        networks:
-            - frontend
 
     product.api:
         container_name: microCommerce_product_api
@@ -181,13 +163,11 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.ProductApi/Dockerfile
-        depends_on:
-            - redis.cache
-            - nosql.data
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5308:5308"
-        networks:
-            - frontend
             
     shipping.api:
         container_name: microCommerce_shipping_api
@@ -197,24 +177,20 @@ services:
         build:
             context: .
             dockerfile: Services/microCommerce.ShippingApi/Dockerfile
-        depends_on:
-            - redis.cache
-            - nosql.data
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
         ports:
             - "5309:5309"
-        networks:
-            - frontend
 
-    nosql.data:
-        image: mongo:latest
-        environment:
-          - MONGO_DATA_DIR=/data/db
-          - MONGO_LOG_DIR=/dev/null
-          - MONGO_URL=mongo://mongo_db:27017
-        ports:
-            - "27017:27017"
-        networks:
-            - frontend
+    # nosql.data:
+    #     image: mongo:latest
+    #     environment:
+    #       - MONGO_DATA_DIR=/data/db
+    #       - MONGO_LOG_DIR=/dev/null
+    #       - MONGO_URL=mongo://mongo_db:27017
+    #     ports:
+    #         - "27017:27017"
 
     # rabbitmq:
     #     image: rabbitmq:3-management-alpine
@@ -225,35 +201,24 @@ services:
     #     ports:
     #         - "15672:15672"
     #         - "5672:5672"
-    #     networks:
-    #         - frontend
 
     # elasticsearch:
     #     image: elasticsearch
     #     ports:
     #         - "9200:9200"
-    #     networks:
-    #         - frontend
     
-    redis.cache:
-        image: redis
-        environment:
-          - ALLOW_EMPTY_PASSWORD=yes
-          - REDIS_URL=redis://redis_db:6379
-        ports:
-          - "6379:6379"
-        networks:
-            - frontend
+    # redis.cache:
+    #     image: redis
+    #     environment:
+    #       - ALLOW_EMPTY_PASSWORD=yes
+    #       - REDIS_URL=redis://redis_db:6379
+    #     ports:
+    #       - "6379:6379"
 
     proxy:
         build: ../proxy
+        ports:
+            - "8080:8080"
         depends_on:
             - front.web
-        ports:
-            - "80:80"
-
-networks:
-    frontend:
-        driver: bridge
-    backend:
-        driver: bridge
+            - admin.web
