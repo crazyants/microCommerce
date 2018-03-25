@@ -8,7 +8,10 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Net.Http.Headers;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -13,6 +13,12 @@ namespace microCommerce.Web.Infrastructure
                     template: "{controller=Home}/{action=Index}/{id?}");
         }
 
-        public int Priority => int.MaxValue;
+        public int Priority
+        {
+            get
+            {
+                return int.MaxValue;
+            }
+        }
     }
 }

@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net;
+using Microsoft.AspNetCore.Mvc.Razor;
+using microCommerce.Mvc.UI;
 
 namespace microCommerce.Mvc.Builders
 {
@@ -27,6 +29,12 @@ namespace microCommerce.Mvc.Builders
             //add mvc engine
             services.AddMvc();
 
+            //add custom view engine
+            services.AddViewEngine();
+
+            //add theme support
+            services.AddThemeSupport();
+
             //add accessor to HttpContext
             services.AddHttpContextAccessor();
 
@@ -38,6 +46,23 @@ namespace microCommerce.Mvc.Builders
 
             //register dependencies
             return engine.RegisterDependencies(services, configuration, config);
+        }
+
+        private static void AddViewEngine(this IServiceCollection services)
+        {
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.ViewLocationExpanders.Clear();
+                options.ViewLocationExpanders.Add(new BaseViewLocationExpander());
+            });
+        }
+
+        private static void AddThemeSupport(this IServiceCollection services)
+        {
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.ViewLocationExpanders.Add(new ThemeableViewLocationExpander());
+            });
         }
 
         /// <summary>

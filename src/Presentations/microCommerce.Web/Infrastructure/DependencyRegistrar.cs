@@ -45,8 +45,13 @@ namespace microCommerce.Web.Infrastructure
             }
             else
                 builder.RegisterType<NullLogger>().As<ILogger>().InstancePerLifetimeScope();
+
+            builder.RegisterType<WebWorkContext>().As<IWorkContext>().InstancePerLifetimeScope();
         }
 
-        public int Priority => 1;
+        public int Priority
+        {
+            get { return 1; }
+        }
     }
 }
