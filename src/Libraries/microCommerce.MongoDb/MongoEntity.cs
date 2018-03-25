@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using microCommerce.Domain;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Runtime.Serialization;
@@ -8,10 +9,10 @@ namespace microCommerce.MongoDb
     [DataContract]
     [Serializable]
     [BsonIgnoreExtraElements(Inherited = true)]
-    public abstract class MongoEntity
+    public abstract class MongoEntity : BaseEntityTypeId<string>
     {
         [DataMember]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public override string Id { get; set; }
     }
 }

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\microCommerce.MongoDb\microCommerce.MongoDb.csproj" />
+    <ProjectReference Include="..\microCommerce.Domain\microCommerce.Domain.csproj" />
   </ItemGroup>
 
 </Project>

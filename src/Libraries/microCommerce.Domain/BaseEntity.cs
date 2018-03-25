@@ -2,13 +2,8 @@
 
 namespace microCommerce.Domain
 {
-    public abstract class BaseEntity
+    public abstract class BaseEntity : BaseEntityTypeId<int>
     {
-        /// <summary>
-        /// Gets or sets the entity identifier
-        /// </summary>
-        public int Id { get; set; }
-
         /// <summary>
         /// Is transient
         /// </summary>
