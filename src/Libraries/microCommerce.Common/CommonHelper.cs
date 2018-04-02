@@ -285,19 +285,7 @@ namespace microCommerce.Common
             result = result.TrimStart();
             return result;
         }
-
-        /// <summary>
-        /// Set Telerik (Kendo UI) culture
-        /// </summary>
-        public static void SetTelerikCulture()
-        {
-            //little hack here
-            //always set culture to 'en-US' (Kendo UI has a bug related to editing decimal values in other cultures)
-            var culture = new CultureInfo("en-US");
-            CultureInfo.CurrentCulture = culture;
-            CultureInfo.CurrentUICulture = culture;
-        }
-
+        
         /// <summary>
         /// Get difference in years
         /// </summary>
@@ -311,6 +299,7 @@ namespace microCommerce.Common
             var age = endDate.Year - startDate.Year;
             if (startDate > endDate.AddYears(-age))
                 age--;
+
             return age;
         }
 

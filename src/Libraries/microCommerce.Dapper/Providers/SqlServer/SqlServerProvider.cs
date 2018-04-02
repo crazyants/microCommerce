@@ -135,6 +135,11 @@ namespace microCommerce.Dapper.Providers.SqlServer
 
             return query;
         }
+
+        public virtual IDbDataParameter CreateParameter()
+        {
+            return new SqlParameter();
+        }
         #endregion
     }
 }

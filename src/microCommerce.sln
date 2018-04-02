@@ -52,11 +52,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.OrderApi", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.ProductApi", "Services\microCommerce.ProductApi\microCommerce.ProductApi.csproj", "{82286CC1-557E-46B5-8725-568EEED7C725}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microCommerce.ShippingApi", "Services\microCommerce.ShippingApi\microCommerce.ShippingApi.csproj", "{71F16060-95F4-44DF-839D-DF8D25B037D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.ShippingApi", "Services\microCommerce.ShippingApi\microCommerce.ShippingApi.csproj", "{71F16060-95F4-44DF-839D-DF8D25B037D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microCommerce.RabbitMQ", "Libraries\microCommerce.RabbitMQ\microCommerce.RabbitMQ.csproj", "{C3636D97-3FA2-4843-9AF6-EAF416DF0249}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.RabbitMQ", "Libraries\microCommerce.RabbitMQ\microCommerce.RabbitMQ.csproj", "{C3636D97-3FA2-4843-9AF6-EAF416DF0249}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microCommerce.ElasticSearch", "Libraries\microCommerce.ElasticSearch\microCommerce.ElasticSearch.csproj", "{115D1F18-DB7F-462D-B6C1-B116173549C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.ElasticSearch", "Libraries\microCommerce.ElasticSearch\microCommerce.ElasticSearch.csproj", "{115D1F18-DB7F-462D-B6C1-B116173549C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.HealthChecks", "Libraries\microCommerce.HealthChecks\microCommerce.HealthChecks.csproj", "{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -368,6 +370,18 @@ Global
 		{115D1F18-DB7F-462D-B6C1-B116173549C3}.Release|x64.Build.0 = Release|Any CPU
 		{115D1F18-DB7F-462D-B6C1-B116173549C3}.Release|x86.ActiveCfg = Release|Any CPU
 		{115D1F18-DB7F-462D-B6C1-B116173549C3}.Release|x86.Build.0 = Release|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Debug|x64.Build.0 = Debug|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Debug|x86.Build.0 = Debug|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Release|x64.ActiveCfg = Release|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Release|x64.Build.0 = Release|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Release|x86.ActiveCfg = Release|Any CPU
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -398,6 +412,7 @@ Global
 		{71F16060-95F4-44DF-839D-DF8D25B037D9} = {D77AAE28-F4BE-48EF-B8E3-226BE905C457}
 		{C3636D97-3FA2-4843-9AF6-EAF416DF0249} = {5537B4B0-58EC-4114-81FD-FF746DD37CBC}
 		{115D1F18-DB7F-462D-B6C1-B116173549C3} = {5537B4B0-58EC-4114-81FD-FF746DD37CBC}
+		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08} = {5537B4B0-58EC-4114-81FD-FF746DD37CBC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B217AD8F-D412-4010-BBF8-57A9DE29307F}

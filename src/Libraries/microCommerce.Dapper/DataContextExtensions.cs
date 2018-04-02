@@ -91,64 +91,64 @@ namespace microCommerce.Dapper
         #endregion
 
         #region Stored Procedure
-        public static int ExecuteProcedure(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static int ExecuteProcedure(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return context.Connection.Execute(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return context.Connection.Execute(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static async Task<int> ExecuteProcedureAsync(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static async Task<int> ExecuteProcedureAsync(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return await context.Connection.ExecuteAsync(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return await context.Connection.ExecuteAsync(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static IDataReader ExecuteProcedureReader(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static IDataReader ExecuteProcedureReader(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return context.Connection.ExecuteReader(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return context.Connection.ExecuteReader(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static async Task<IDataReader> ExecuteReaderProcedureAsync(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static async Task<IDataReader> ExecuteReaderProcedureAsync(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return await context.Connection.ExecuteReaderAsync(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return await context.Connection.ExecuteReaderAsync(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static T ExecuteScalarProcedure<T>(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static T ExecuteScalarProcedure<T>(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return context.Connection.ExecuteScalar<T>(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return context.Connection.ExecuteScalar<T>(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static object ExecuteScalarProcedure(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static object ExecuteScalarProcedure(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return context.Connection.ExecuteScalar(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return context.Connection.ExecuteScalar(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static async Task<T> ExecuteScalarProcedureAsync<T>(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static async Task<T> ExecuteScalarProcedureAsync<T>(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return await context.Connection.ExecuteScalarAsync<T>(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return await context.Connection.ExecuteScalarAsync<T>(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static async Task<object> ExecuteScalarProcedureAsync(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static async Task<object> ExecuteScalarProcedureAsync(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return await context.Connection.ExecuteScalarAsync(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return await context.Connection.ExecuteScalarAsync(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static T FirstProcedure<T>(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static T FirstProcedure<T>(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return context.Connection.QueryFirstOrDefault<T>(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return context.Connection.QueryFirstOrDefault<T>(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static async Task<T> FirstProcedureAsync<T>(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static async Task<T> FirstProcedureAsync<T>(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return await context.Connection.QueryFirstOrDefaultAsync<T>(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return await context.Connection.QueryFirstOrDefaultAsync<T>(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static IEnumerable<T> QueryProcedure<T>(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static IEnumerable<T> QueryProcedure<T>(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return context.Connection.Query<T>(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return context.Connection.Query<T>(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
 
-        public static async Task<IEnumerable<T>> QueryProcedureAsync<T>(this IDataContext context, string commandText, object parameters = null, IDbTransaction transaction = null)
+        public static async Task<IEnumerable<T>> QueryProcedureAsync<T>(this IDataContext context, string procedureName, object parameters = null, IDbTransaction transaction = null)
         {
-            return await context.Connection.QueryAsync<T>(new CommandDefinition(commandText, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
+            return await context.Connection.QueryAsync<T>(new CommandDefinition(procedureName, parameters, transaction, context.ExecutionTimeOut, CommandType.StoredProcedure));
         }
         #endregion
     }

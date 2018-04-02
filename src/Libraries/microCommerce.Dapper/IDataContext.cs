@@ -16,6 +16,7 @@ namespace microCommerce.Dapper
 
         IDbTransaction BeginTransaction();
         void OpenConnection();
+        IDataParameter CreateParameter();
         IDbConnection Connection { get; }
         int ExecutionTimeOut { get; }
 

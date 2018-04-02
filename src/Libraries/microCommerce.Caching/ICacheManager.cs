@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace microCommerce.Caching
 {
@@ -11,7 +12,7 @@ namespace microCommerce.Caching
         /// <param name="key">Key of cached item</param>
         /// <returns>The cached value associated with the specified key</returns>
         T Get<T>(string key);
-
+        
         /// <summary>
         /// Adds the specified key and object to the cache
         /// </summary>
@@ -19,7 +20,7 @@ namespace microCommerce.Caching
         /// <param name="data">Value for caching</param>
         /// <param name="cacheTime">Cache time in minutes</param>
         void Set(string key, object data, int cacheTime);
-
+        
         /// <summary>
         /// Gets a value indicating whether the value associated with the specified key is cached
         /// </summary>

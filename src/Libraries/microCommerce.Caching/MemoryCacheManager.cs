@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace microCommerce.Caching
 {
@@ -108,10 +109,8 @@ namespace microCommerce.Caching
         /// </summary>
         private void ClearKeys()
         {
-            foreach (var key in _allKeys.Where(p => !p.Value).Select(p => p.Key).ToList())
-            {
+            foreach (var key in _allKeys.Where(p => !p.Value).Select(p => p.Key))
                 RemoveKey(key);
-            }
         }
 
         /// <summary>
@@ -148,7 +147,7 @@ namespace microCommerce.Caching
         {
             return _cache.Get<T>(key);
         }
-
+        
         /// <summary>
         /// Adds the specified key and object to the cache
         /// </summary>

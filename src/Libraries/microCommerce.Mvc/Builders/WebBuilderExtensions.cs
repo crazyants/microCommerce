@@ -8,10 +8,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Net.Http.Headers;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,10 +18,6 @@ namespace microCommerce.Mvc.Builders
     {
         public static void ConfigurePipeline(this IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseMvc(RegisterRoutes);
-
-            app.UseStaticFiles();
-
             //exception handling
             app.UseCustomExceptionHandler();
 
@@ -34,6 +27,10 @@ namespace microCommerce.Mvc.Builders
             //handle 404 errors (not found)
             app.UseCustomPageNotFound();
 
+            app.UseMvc(RegisterRoutes);
+
+            app.UseStaticFiles();
+            
             //set culture by user data
             //app.UseCulture();
         }

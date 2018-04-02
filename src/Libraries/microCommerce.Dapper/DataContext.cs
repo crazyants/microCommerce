@@ -98,6 +98,11 @@ namespace microCommerce.Dapper
                 (_connection.State != ConnectionState.Open || _connection.State != ConnectionState.Connecting))
                 _connection.Open();
         }
+
+        public virtual IDataParameter CreateParameter()
+        {
+            return _provider.CreateParameter();
+        }
         #endregion
 
         #region Properties

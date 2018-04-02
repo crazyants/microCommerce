@@ -133,6 +133,11 @@ namespace microCommerce.Dapper.Providers.PostgreSql
 
             return query;
         }
+
+        public virtual IDbDataParameter CreateParameter()
+        {
+            return new NpgsqlParameter();
+        }
         #endregion
     }
 }

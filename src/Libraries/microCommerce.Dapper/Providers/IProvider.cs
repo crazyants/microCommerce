@@ -16,5 +16,6 @@ namespace microCommerce.Dapper.Providers
         string SelectFirstQuery<T>(string tableName, IEnumerable<string> columns) where T : BaseEntity;
         string ExistingQuery(string tableName);
         string CountQuery(string tableName);
+        IDbDataParameter CreateParameter();
     }
 }

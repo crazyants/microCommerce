@@ -20,9 +20,7 @@ namespace microCommerce.Dapper
         {
             Type entityType = typeof(T);
             string commandText = _provider.SelectFirstQuery<T>(entityType.Name, GetColumns(entityType, true));
-
-            Console.WriteLine(commandText);
-
+            
             //execute first query
             return _connection.QueryFirstOrDefault<T>(commandText, new { Id });
         }
@@ -36,9 +34,7 @@ namespace microCommerce.Dapper
         {
             Type entityType = typeof(T);
             string commandText = _provider.SelectFirstQuery<T>(entityType.Name, GetColumns(entityType, true));
-
-            Console.WriteLine(commandText);
-
+            
             //execute first query
             return await _connection.QueryFirstOrDefaultAsync<T>(commandText, new { Id });
         }
@@ -46,38 +42,30 @@ namespace microCommerce.Dapper
         public virtual bool Exist<T>(int Id) where T : BaseEntity
         {
             string commandText = _provider.ExistingQuery(typeof(T).Name);
-
-            Console.WriteLine(commandText);
             
             //execute existing query
             return _connection.ExecuteScalar<bool>(commandText, new { Id });
         }
 
-        public virtual int Count<T>() where T : BaseEntity
-        {
-            string commandText = _provider.CountQuery(typeof(T).Name);
-
-            Console.WriteLine(commandText);
-            
-            //execute existing query
-            return _connection.ExecuteScalar<int>(commandText);
-        }
-
         public virtual async Task<bool> ExistAsync<T>(int Id) where T : BaseEntity
         {
             string commandText = _provider.ExistingQuery(typeof(T).Name);
-
-            Console.WriteLine(commandText);
             
             //execute existing query
             return await _connection.ExecuteScalarAsync<bool>(commandText, new { Id });
         }
 
+        public virtual int Count<T>() where T : BaseEntity
+        {
+            string commandText = _provider.CountQuery(typeof(T).Name);
+            
+            //execute existing query
+            return _connection.ExecuteScalar<int>(commandText);
+        }
+
         public virtual async Task<int> CountAsync<T>() where T : BaseEntity
         {
             string commandText = _provider.CountQuery(typeof(T).Name);
-
-            Console.WriteLine(commandText);
             
             //execute existing query
             return await _connection.ExecuteScalarAsync<int>(commandText);

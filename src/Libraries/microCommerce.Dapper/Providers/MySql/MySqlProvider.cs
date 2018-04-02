@@ -1,12 +1,10 @@
+using microCommerce.Domain;
+using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using microCommerce.Domain;
-using MySql.Data.MySqlClient;
 
 namespace microCommerce.Dapper.Providers.MySql
 {
@@ -133,6 +131,11 @@ namespace microCommerce.Dapper.Providers.MySql
                             tableName);
 
             return query;
+        }
+
+        public virtual IDbDataParameter CreateParameter()
+        {
+            return new MySqlParameter();
         }
         #endregion
     }
