@@ -9,12 +9,6 @@ namespace microCommerce.Ioc
     public interface IEngine
     {
         /// <summary>
-        /// Initialize engine
-        /// </summary>
-        /// <param name="services">Collection of service descriptors</param>
-        void Initialize(IServiceCollection services);
-
-        /// <summary>
         /// Register dependencies using Autofac
         /// </summary>
         /// <param name="services"></param>

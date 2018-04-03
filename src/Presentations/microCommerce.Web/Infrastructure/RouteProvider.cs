@@ -1,5 +1,4 @@
 ﻿using microCommerce.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 
 namespace microCommerce.Web.Infrastructure
@@ -8,9 +7,9 @@ namespace microCommerce.Web.Infrastructure
     {
         public void RegisterRoutes(IRouteBuilder routeBuilder)
         {
-            routeBuilder.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+            //routeBuilder.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
         }
 
         public int Priority

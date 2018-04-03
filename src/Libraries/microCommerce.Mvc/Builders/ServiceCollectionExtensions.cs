@@ -20,11 +20,11 @@ namespace microCommerce.Mvc.Builders
 
             //create, initialize and configure the engine
             var engine = EngineContext.Create();
-            engine.Initialize(services);
+            //engine.Initialize(services);
 
             //most of API providers require TLS 1.2 nowadays
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
+            
             //add mvc engine
             var mvcBuilder = services.AddMvcCore();
 

@@ -46,6 +46,10 @@ namespace microCommerce.Mvc.Builders
 
             foreach (var instance in instances)
                 instance.RegisterRoutes(routeBuilder);
+
+            routeBuilder.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
         }
 
         private static void UseCustomExceptionHandler(this IApplicationBuilder application)

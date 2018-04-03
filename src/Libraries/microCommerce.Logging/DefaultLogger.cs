@@ -5,13 +5,18 @@ namespace microCommerce.Logging
 {
     public class DefaultLogger : ILogger
     {
+        #region Fields
         private readonly IMongoRepository<Log> _logRepository;
+        #endregion
 
+        #region Ctor
         public DefaultLogger(IMongoRepository<Log> logRepository)
         {
             _logRepository = logRepository;
         }
+        #endregion
 
+        #region Methods
         public virtual void Log(LogLevel logLevel,
             string shortMessage,
             string fullMessage = null,
@@ -35,5 +40,6 @@ namespace microCommerce.Logging
 
             _logRepository.Insert(log);
         }
+        #endregion
     }
 }

@@ -265,44 +265,7 @@ namespace microCommerce.Common
             //return (T)Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture);
             return (T)To(value, typeof(T));
         }
-
-        /// <summary>
-        /// Convert enum for front-end
-        /// </summary>
-        /// <param name="str">Input string</param>
-        /// <returns>Converted string</returns>
-        public static string ConvertEnum(string str)
-        {
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-            var result = string.Empty;
-            foreach (var c in str)
-                if (c.ToString() != c.ToString().ToLower())
-                    result += " " + c.ToString();
-                else
-                    result += c.ToString();
-
-            //ensure no spaces (e.g. when the first letter is upper case)
-            result = result.TrimStart();
-            return result;
-        }
         
-        /// <summary>
-        /// Get difference in years
-        /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
-        public static int GetDifferenceInYears(DateTime startDate, DateTime endDate)
-        {
-            //source: http://stackoverflow.com/questions/9/how-do-i-calculate-someones-age-in-c
-            //this assumes you are looking for the western idea of age and not using East Asian reckoning.
-            var age = endDate.Year - startDate.Year;
-            if (startDate > endDate.AddYears(-age))
-                age--;
-
-            return age;
-        }
-
         /// <summary>
         /// Maps a virtual path to a physical disk path.
         /// </summary>
@@ -311,7 +274,7 @@ namespace microCommerce.Common
         public static string MapPath(string path)
         {
             path = path.Replace("~/", "").TrimStart('/').Replace('/', '\\');
-            return Path.Combine(BaseDirectory ?? string.Empty, path);
+            return Path.Combine(GlobalConfiguration.ContentRootPath, path);
         }
 
         /// <summary>
@@ -382,15 +345,6 @@ namespace microCommerce.Common
                 Directory.Delete(path, true);
             }
         }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets application base path
-        /// </summary>
-        public static string BaseDirectory { get; set; }
 
         #endregion
     }

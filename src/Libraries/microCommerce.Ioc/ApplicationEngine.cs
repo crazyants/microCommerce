@@ -1,7 +1,10 @@
 ﻿using Autofac;
+using Autofac.Builder;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using microCommerce.Common;
 using microCommerce.Common.Configurations;
+using microCommerce.Domain.Settings;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace microCommerce.Ioc
 {
@@ -30,18 +34,7 @@ namespace microCommerce.Ioc
             }
         }
         #endregion
-
-        /// <summary>
-        /// Initialize engine
-        /// </summary>
-        /// <param name="services">Collection of service descriptors</param>
-        public virtual void Initialize(IServiceCollection services)
-        {
-            //set base application path
-            var provider = services.BuildServiceProvider();
-            CommonHelper.BaseDirectory = provider.GetRequiredService<IHostingEnvironment>().ContentRootPath;
-        }
-
+        
         public IServiceProvider RegisterDependencies(IServiceCollection services, IConfigurationRoot configuration, IAppConfiguration config)
         {
             var containerBuilder = new ContainerBuilder();
@@ -65,6 +58,9 @@ namespace microCommerce.Ioc
             foreach (var dependencyRegistrar in instances)
                 dependencyRegistrar.Register(containerBuilder, assemblyFinder, configuration, config);
 
+            //register settings
+            containerBuilder.RegisterSource(new SettingsSource());
+
             //populate Autofac container builder with the set of registered service descriptors
             containerBuilder.Populate(services);
 
@@ -80,6 +76,47 @@ namespace microCommerce.Ioc
                 task.Execute();
 
             return _serviceProvider;
+        }
+
+        /// <summary>
+        /// Setting source
+        /// </summary>
+        public class SettingsSource : IRegistrationSource
+        {
+            static readonly MethodInfo BuildMethod = typeof(SettingsSource).GetMethod(
+                "BuildRegistration",
+                BindingFlags.Static | BindingFlags.NonPublic);
+
+            /// <summary>
+            /// Is adapter for individual components
+            /// </summary>
+            public bool IsAdapterForIndividualComponents { get { return false; } }
+
+            /// <summary>
+            /// Settings registrations
+            /// </summary>
+            /// <param name="service"></param>
+            /// <param name="registrations"></param>
+            /// <returns></returns>
+            public IEnumerable<IComponentRegistration> RegistrationsFor(
+                Service service,
+                Func<Service, IEnumerable<IComponentRegistration>> registrations)
+            {
+                var ts = service as TypedService;
+                if (ts != null && typeof(ISettings).IsAssignableFrom(ts.ServiceType))
+                {
+                    var buildMethod = BuildMethod.MakeGenericMethod(ts.ServiceType);
+                    yield return (IComponentRegistration)buildMethod.Invoke(null, null);
+                }
+            }
+
+            static IComponentRegistration BuildRegistration<TSettings>() where TSettings : ISettings, new()
+            {
+                return RegistrationBuilder
+                    .ForDelegate((c, p) => c.Resolve<ISettingService>().LoadSetting<TSettings>())
+                    .InstancePerLifetimeScope()
+                    .CreateRegistration();
+            }
         }
 
         public T Resolve<T>() where T : class

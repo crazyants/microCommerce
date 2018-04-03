@@ -180,7 +180,8 @@ namespace microCommerce.MediaApi.Services
         {
             string lastPart = GetFileExtensionFromMimeType(mimeType);
             string fileName = string.Format("{0}_0.{1}", pictureId.ToString("0000000"), lastPart);
-            File.WriteAllBytes(GetPictureLocalPath(fileName), pictureBinary);
+            string filePath = GetPictureLocalPath(fileName);
+            File.WriteAllBytes(filePath, pictureBinary);
         }
 
         /// <summary>
