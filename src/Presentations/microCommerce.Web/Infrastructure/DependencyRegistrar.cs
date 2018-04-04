@@ -42,6 +42,8 @@ namespace microCommerce.Web.Infrastructure
                     builder.RegisterGeneric(typeof(MongoRepository<>)).As(typeof(IMongoRepository<>)).InstancePerLifetimeScope();
                     builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
                 }
+                else
+                    builder.RegisterType<NullLogger>().As<ILogger>().InstancePerLifetimeScope();
             }
             else
                 builder.RegisterType<NullLogger>().As<ILogger>().InstancePerLifetimeScope();

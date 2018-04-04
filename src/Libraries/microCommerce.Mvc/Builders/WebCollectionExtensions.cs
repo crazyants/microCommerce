@@ -7,6 +7,7 @@ using System;
 using System.Net;
 using Microsoft.AspNetCore.Mvc.Razor;
 using microCommerce.Mvc.UI;
+using Microsoft.AspNetCore.Builder;
 
 namespace microCommerce.Mvc.Builders
 {
@@ -28,6 +29,9 @@ namespace microCommerce.Mvc.Builders
 
             //add mvc engine
             services.AddMvc();
+
+            //add response compression
+            services.AddResponseCompression();
 
             //add custom view engine
             services.AddViewEngine();

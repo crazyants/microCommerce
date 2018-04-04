@@ -27,8 +27,10 @@ namespace microCommerce.Mvc.Builders
             //handle 404 errors (not found)
             app.UseCustomPageNotFound();
 
+            //use mvc engine
             app.UseMvc(RegisterRoutes);
 
+            //use static files
             app.UseStaticFiles();
             
             //set culture by user data

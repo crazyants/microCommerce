@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace microCommerce.Web.ViewComponents
 {
-    [ViewComponent(Name = "Header")]
-    public class FooterComponent : BaseComponent
+    public class TopMenuViewComponent : BaseViewComponent
     {
         public IViewComponentResult Invoke()
         {

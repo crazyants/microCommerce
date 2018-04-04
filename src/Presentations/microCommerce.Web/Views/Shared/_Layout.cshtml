@@ -6,7 +6,9 @@
     <title>microCommerce.Web</title>
 </head>
 <body>
+    @await Component.InvokeAsync("Header")
+    @await Component.InvokeAsync("TopMenu")
     @RenderBody()
-    @RenderSection("Scripts", required: false)
+    @await Component.InvokeAsync("Footer")
 </body>
 </html>
