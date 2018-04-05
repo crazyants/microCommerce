@@ -4,4 +4,12 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NEST" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\microCommerce.Domain\microCommerce.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

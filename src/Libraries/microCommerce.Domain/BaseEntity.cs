@@ -2,6 +2,9 @@
 
 namespace microCommerce.Domain
 {
+    /// <summary>
+    /// Base entity with integer type identifier
+    /// </summary>
     public abstract class BaseEntity : BaseEntityTypeId<int>
     {
         /// <summary>
