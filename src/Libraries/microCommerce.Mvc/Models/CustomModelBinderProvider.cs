@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace microCommerce.Mvc
+namespace microCommerce.Mvc.Models
 {
     public class CustomModelBinderProvider:IModelBinderProvider
     {

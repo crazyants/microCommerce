@@ -10,4 +10,7 @@
     <ProjectReference Include="..\..\Libraries\microCommerce.Redis\microCommerce.Redis.csproj" />
     <ProjectReference Include="..\..\Libraries\microCommerce.MongoDb\microCommerce.MongoDb.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
 </Project>

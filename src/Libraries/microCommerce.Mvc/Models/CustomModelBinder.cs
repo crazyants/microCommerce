@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using System;
 using System.Collections.Generic;
 
-namespace microCommerce.Mvc
+namespace microCommerce.Mvc.Models
 {
     public class CustomModelBinder : ComplexTypeModelBinder
     {

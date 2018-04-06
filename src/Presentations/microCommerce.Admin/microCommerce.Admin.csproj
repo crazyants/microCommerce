@@ -9,4 +9,7 @@
     <ProjectReference Include="..\..\Libraries\microCommerce.Mvc\microCommerce.Mvc.csproj" />
     <ProjectReference Include="..\..\Libraries\microCommerce.Redis\microCommerce.Redis.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
 </Project>

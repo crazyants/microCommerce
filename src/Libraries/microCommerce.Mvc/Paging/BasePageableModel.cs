@@ -1,4 +1,5 @@
 ﻿using microCommerce.Common;
+using microCommerce.Mvc.Models;
 using System;
 
 namespace microCommerce.Mvc.Paging

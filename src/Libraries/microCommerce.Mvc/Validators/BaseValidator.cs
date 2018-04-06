@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using microCommerce.Mvc.Models;
 
 namespace microCommerce.Mvc.Validators
 {

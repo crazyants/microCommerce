@@ -1,4 +1,4 @@
-﻿namespace microCommerce.Mvc
+﻿namespace microCommerce.Mvc.Models
 {
     public interface IModelAttribute
     {
