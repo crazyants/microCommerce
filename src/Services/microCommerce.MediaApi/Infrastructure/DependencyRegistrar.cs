@@ -44,6 +44,7 @@ namespace microCommerce.MediaApi.Infrastructure
                     builder.RegisterGeneric(typeof(MongoRepository<>)).As(typeof(IMongoRepository<>)).InstancePerLifetimeScope();
                     builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
                 }
+                builder.RegisterType<NullLogger>().As<ILogger>().InstancePerLifetimeScope();
             }
             //register null logger
             else
