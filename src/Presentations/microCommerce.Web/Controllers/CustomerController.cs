@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace microCommerce.Web.Controllers
 {
-    public class CatalogController : FrontBaseController
+    public class CustomerController : FrontBaseController
     {
 
     }
