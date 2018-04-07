@@ -27,7 +27,7 @@ namespace microCommerce.Mvc.Builders
             
             //add mvc engine
             var mvcBuilder = services.AddMvcCore();
-
+            
             //add json serializer
             mvcBuilder.AddJsonFormatters();
 

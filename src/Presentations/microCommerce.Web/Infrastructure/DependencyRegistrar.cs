@@ -22,17 +22,22 @@ namespace microCommerce.Web.Infrastructure
             //user agent helper
             builder.RegisterType<UserAgentHelper>().As<IUserAgentHelper>().InstancePerLifetimeScope();
 
-            //cache manager
-            builder.RegisterType<PerRequestCacheManager>().As<ICacheManager>().InstancePerLifetimeScope();
-
-            //static cache manager
-            if (config.UseRedisCaching)
+            if (config.CachingEnabled)
             {
-                builder.RegisterInstance(new RedisConnectionWrapper(config.RedisConnectionString)).As<IRedisConnectionWrapper>().SingleInstance();
-                builder.RegisterType<RedisCacheManager>().As<IStaticCacheManager>().InstancePerLifetimeScope();
+                //cache manager
+                builder.RegisterType<PerRequestCacheManager>().As<ICacheManager>().InstancePerLifetimeScope();
+
+                //static cache manager
+                if (config.UseRedisCaching)
+                {
+                    builder.RegisterInstance(new RedisConnectionWrapper(config.RedisConnectionString)).As<IRedisConnectionWrapper>().SingleInstance();
+                    builder.RegisterType<RedisCacheManager>().As<IStaticCacheManager>().InstancePerLifetimeScope();
+                }
+                else
+                    builder.RegisterType<MemoryCacheManager>().As<IStaticCacheManager>().SingleInstance();
             }
             else
-                builder.RegisterType<MemoryCacheManager>().As<IStaticCacheManager>().SingleInstance();
+                builder.RegisterType<NullCacheManager>().As<ICacheManager>().InstancePerLifetimeScope();
 
             if (config.LoggingEnabled)
             {

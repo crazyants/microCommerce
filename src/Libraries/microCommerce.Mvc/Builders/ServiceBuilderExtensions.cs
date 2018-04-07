@@ -1,8 +1,8 @@
-﻿using microCommerce.Ioc;
+﻿using microCommerce.Common;
 using microCommerce.Common.Configurations;
+using microCommerce.Ioc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using microCommerce.Common;
 using System.IO;
 
 namespace microCommerce.Mvc.Builders
@@ -25,7 +25,7 @@ namespace microCommerce.Mvc.Builders
             GlobalConfiguration.ContentRootPath = env.WebRootPath;
             GlobalConfiguration.ModulesRootPath = Path.Combine(env.ContentRootPath, "Modules");
         }
-
+        
         private static void UseCustomizedSwagger(this IApplicationBuilder app)
         {
             app.UseSwagger(s =>
