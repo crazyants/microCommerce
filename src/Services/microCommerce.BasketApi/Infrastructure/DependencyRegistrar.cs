@@ -56,7 +56,7 @@ namespace microCommerce.BasketApi.Infrastructure
             var provider = ProviderFactory.GetProvider(serviceConfig.DatabaseProviderName);
             var connection = provider.CreateConnection(serviceConfig.ConnectionString);
             builder.RegisterInstance(connection).As<IDbConnection>().SingleInstance();
-            builder.RegisterInstance(provider).As<IProvider>().SingleInstance();
+            builder.RegisterInstance(provider).As<IDataProvider>().SingleInstance();
             builder.RegisterInstance(new DataContext(provider, connection)).As<IDataContext>().SingleInstance();
         }
 

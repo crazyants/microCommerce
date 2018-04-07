@@ -7,16 +7,16 @@ namespace microCommerce.Dapper.Providers
 {
     public class ProviderFactory
     {
-        public static IProvider GetProvider(string providerName)
+        public static IDataProvider GetProvider(string providerName)
         {
             switch (providerName)
             {
                 case "System.Data.SqlClient":
-                    return new SqlServerProvider();
+                    return new SqlServerDataProvider();
                 case "MySql.Data.SqlClient":
-                    return new MySqlProvider();
+                    return new MySqlDataProvider();
                 case "NpgSql.Data.SqlClient":
-                    return new PostgreSqlProvider();
+                    return new PostgreSqlDataProvider();
                 default:
                     throw new CustomException("Database provider does not supported!");
             }

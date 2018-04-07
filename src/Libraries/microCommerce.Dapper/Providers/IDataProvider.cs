@@ -4,7 +4,7 @@ using System.Data;
 
 namespace microCommerce.Dapper.Providers
 {
-    public interface IProvider
+    public interface IDataProvider
     {
         IDbConnection CreateConnection(string connectionString);
         string InsertQuery(string tableName, object entity, IEnumerable<string> columns);

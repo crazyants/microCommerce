@@ -8,10 +8,9 @@ using System.Text;
 
 namespace microCommerce.Dapper.Providers.PostgreSql
 {
-    public class PostgreSqlProvider : IProvider
+    public class PostgreSqlDataProvider : IDataProvider
     {
         #region Constant
-
         private const string INSERT_QUERY = "INSERT INTO public.\"{0}\" ({1}) VALUES(@{2}) RETURNING Id";
         private const string INSERT_BULK_QUERY = "INSERT INTO public.\"{0}\" ({1}) VALUES ({2})\r\n";
         private const string UPDATE_QUERY = "UPDATE public.\"{0}\" SET {1} WHERE \"Id\" = @Id";
@@ -21,7 +20,6 @@ namespace microCommerce.Dapper.Providers.PostgreSql
         private const string SELECT_FIRST_QUERY = "SELECT\r\n{1} FROM public.\"{0}\" WHERE \"Id\" = @Id LIMIT 1";
         private const string EXISTING_QUERY = "SELECT CASE WHEN EXISTS (SELECT \"Id\" FROM public.\"{0}\" WHERE \"Id\" = @Id) THEN 1 ELSE 0 END";
         private const string COUNT_QUERY = "SELECT COUNT(\"Id\") FROM public.\"{0}\"";
-
         #endregion
 
         #region Methods

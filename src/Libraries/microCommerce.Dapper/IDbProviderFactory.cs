@@ -4,6 +4,6 @@ namespace microCommerce.Dapper
 {
     public interface IDbProviderFactory
     {
-        IProvider Create(string providerName);
+        IDataProvider Create(string providerName);
     }
 }

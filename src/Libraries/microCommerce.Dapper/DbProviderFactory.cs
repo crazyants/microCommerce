@@ -8,7 +8,7 @@ namespace microCommerce.Dapper
 {
     public class DbProviderFactory : IDbProviderFactory
     {
-        public virtual IProvider Create(string providerName)
+        public virtual IDataProvider Create(string providerName)
         {
             Check.IsEmpty(providerName);
 
@@ -17,15 +17,15 @@ namespace microCommerce.Dapper
             {
                 case "system.data.sqlclient":
                     {
-                        return new SqlServerProvider();
+                        return new SqlServerDataProvider();
                     }
                 case "mysql.data.sqlclient":
                     {
-                        return new MySqlProvider();
+                        return new MySqlDataProvider();
                     }
                 case "npsql.data.sqlclient":
                     {
-                        return new PostgreSqlProvider();
+                        return new PostgreSqlDataProvider();
                     }
                 default:
                     return null;
