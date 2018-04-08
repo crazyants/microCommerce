@@ -1,12 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\microCommerce.MongoDb\microCommerce.MongoDb.csproj" />
     <ProjectReference Include="..\microCommerce.Domain\microCommerce.Domain.csproj" />
   </ItemGroup>
-
 </Project>

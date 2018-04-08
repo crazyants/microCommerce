@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{5537B4B0-58EC-4114-81FD-FF746DD37CBC}"
 EndProject
@@ -59,6 +59,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.ElasticSearch", "Libraries\microCommerce.ElasticSearch\microCommerce.ElasticSearch.csproj", "{115D1F18-DB7F-462D-B6C1-B116173549C3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.HealthChecks", "Libraries\microCommerce.HealthChecks\microCommerce.HealthChecks.csproj", "{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.IdentityApi", "Services\microCommerce.IdentityApi\microCommerce.IdentityApi.csproj", "{B7EC4EDD-851E-45CE-8B52-75E887003399}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microCommerce.SettingApi", "Services\microCommerce.SettingApi\microCommerce.SettingApi.csproj", "{1F16C96F-5437-47C1-8E88-78308AAC9CE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -382,6 +386,30 @@ Global
 		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Release|x64.Build.0 = Release|Any CPU
 		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Release|x86.ActiveCfg = Release|Any CPU
 		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08}.Release|x86.Build.0 = Release|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Debug|x64.Build.0 = Debug|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Debug|x86.Build.0 = Debug|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Release|x64.ActiveCfg = Release|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Release|x64.Build.0 = Release|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Release|x86.ActiveCfg = Release|Any CPU
+		{B7EC4EDD-851E-45CE-8B52-75E887003399}.Release|x86.Build.0 = Release|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Debug|x64.Build.0 = Debug|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Debug|x86.Build.0 = Debug|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Release|x64.ActiveCfg = Release|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Release|x64.Build.0 = Release|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Release|x86.ActiveCfg = Release|Any CPU
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -413,6 +441,8 @@ Global
 		{C3636D97-3FA2-4843-9AF6-EAF416DF0249} = {5537B4B0-58EC-4114-81FD-FF746DD37CBC}
 		{115D1F18-DB7F-462D-B6C1-B116173549C3} = {5537B4B0-58EC-4114-81FD-FF746DD37CBC}
 		{1EC833ED-B2B9-43EF-95CF-8F4863D5FB08} = {5537B4B0-58EC-4114-81FD-FF746DD37CBC}
+		{B7EC4EDD-851E-45CE-8B52-75E887003399} = {D77AAE28-F4BE-48EF-B8E3-226BE905C457}
+		{1F16C96F-5437-47C1-8E88-78308AAC9CE6} = {D77AAE28-F4BE-48EF-B8E3-226BE905C457}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B217AD8F-D412-4010-BBF8-57A9DE29307F}
