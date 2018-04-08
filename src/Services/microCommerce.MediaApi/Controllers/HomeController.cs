@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using microCommerce.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
 namespace microCommerce.MediaApi.Controllers
 {
     [Route("/")]
-    public class HomeController : Controller
+    public class HomeController : ServiceBaseController
     {
         [HttpGet]
         public IActionResult Get()

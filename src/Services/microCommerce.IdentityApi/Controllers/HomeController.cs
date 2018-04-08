@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
-namespace microCommerce.GeoLocationApi.Controllers
+namespace microCommerce.IdentityApi.Controllers
 {
     [Route("/")]
     public class HomeController : ServiceBaseController
@@ -10,7 +10,7 @@ namespace microCommerce.GeoLocationApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Content("GeoLocationApi is a live", "text/plain", Encoding.UTF8);
+            return Content("IdentityApi is a live", "text/plain", Encoding.UTF8);
         }
     }
 }

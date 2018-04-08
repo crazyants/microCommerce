@@ -1,8 +1,8 @@
 ﻿using MaxMind.GeoIP2;
 using MaxMind.GeoIP2.Exceptions;
 using microCommerce.Common;
-using microCommerce.Domain.Settings;
 using microCommerce.Logging;
+using microCommerce.Setting;
 using System;
 using System.Threading.Tasks;
 

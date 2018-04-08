@@ -1,4 +1,4 @@
-﻿namespace microCommerce.Domain.Settings
+﻿namespace microCommerce.Setting
 {
     public interface ISettings
     {

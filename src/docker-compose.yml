@@ -10,12 +10,13 @@ services:
             context: .
             dockerfile: Presentations/microCommerce.Web/Dockerfile
         depends_on:
-            - category.api
-            - product.api
-            - media.api
-            - customer.api
+            - identity.api
             - geolocation.api
             - directory.api
+            - customer.api
+            - media.api
+            - category.api
+            - product.api
             - basket.api
             - checkout.api
             - order.api
@@ -32,12 +33,14 @@ services:
             context: .
             dockerfile: Presentations/microCommerce.Admin/Dockerfile
         depends_on:
+            - identity.api
+            - directory.api
+            - customer.api
+            - media.api
             - category.api
             - product.api
-            - media.api
-            - customer.api
-            - directory.api
             - basket.api
+            - checkout.api
             - order.api
             - shipping.api
         ports:
@@ -52,6 +55,7 @@ services:
             context: .
             dockerfile: Services/microCommerce.BasketApi/Dockerfile
         # depends_on:
+        #     - identity.api
         #     - redis.cache
         #     - nosql.data
         ports:
@@ -66,6 +70,7 @@ services:
             context: .
             dockerfile: Services/microCommerce.CategoryApi/Dockerfile
         # depends_on:
+        #     - identity.api
         #     - redis.cache
         #     - nosql.data
         ports:
@@ -80,6 +85,7 @@ services:
             context: .
             dockerfile: Services/microCommerce.CheckoutApi/Dockerfile
         # depends_on:
+        #     - identity.api
         #     - redis.cache
         #     - nosql.data
         ports:
@@ -94,6 +100,7 @@ services:
             context: .
             dockerfile: Services/microCommerce.CustomerApi/Dockerfile
         # depends_on:
+        #     - identity.api
         #     - redis.cache
         #     - nosql.data
         ports:
@@ -108,6 +115,7 @@ services:
             context: .
             dockerfile: Services/microCommerce.DirectoryApi/Dockerfile
         # depends_on:
+        #     - identity.api
         #     - redis.cache
         #     - nosql.data
         ports:
@@ -122,6 +130,7 @@ services:
             context: .
             dockerfile: Services/microCommerce.GeoLocationApi/Dockerfile
         # depends_on:
+        #     - identity.api
         #     - redis.cache
         #     - nosql.data
         ports:
@@ -136,6 +145,7 @@ services:
             context: .
             dockerfile: Services/microCommerce.MediaApi/Dockerfile
         # depends_on:
+        #     - identity.api
         #     - redis.cache
         #     - nosql.data
         ports:
@@ -150,6 +160,7 @@ services:
             context: .
             dockerfile: Services/microCommerce.OrderApi/Dockerfile
         # depends_on:
+        #     - identity.api
         #     - redis.cache
         #     - nosql.data
         ports:
@@ -164,6 +175,7 @@ services:
             context: .
             dockerfile: Services/microCommerce.ProductApi/Dockerfile
         # depends_on:
+        #     - identity.api
         #     - redis.cache
         #     - nosql.data
         ports:
@@ -178,10 +190,25 @@ services:
             context: .
             dockerfile: Services/microCommerce.ShippingApi/Dockerfile
         # depends_on:
+        #     - identity.api
         #     - redis.cache
         #     - nosql.data
         ports:
             - "5309:5309"
+            
+    identity.api:
+        container_name: microCommerce_identity_api
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=http://*:5310
+        build:
+            context: .
+            dockerfile: Services/microCommerce.IdentityApi/Dockerfile
+        # depends_on:
+        #     - redis.cache
+        #     - nosql.data
+        ports:
+            - "5310:5310"
 
     # nosql.data:
     #     image: mongo:latest

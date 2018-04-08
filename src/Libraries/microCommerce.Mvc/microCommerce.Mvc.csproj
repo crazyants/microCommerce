@@ -13,5 +13,6 @@
     <ProjectReference Include="..\microCommerce.Ioc\microCommerce.Ioc.csproj" />
     <ProjectReference Include="..\microCommerce.Localization\microCommerce.Localization.csproj" />
     <ProjectReference Include="..\microCommerce.Logging\microCommerce.Logging.csproj" />
+    <ProjectReference Include="..\microCommerce.Setting\microCommerce.Setting.csproj" />
   </ItemGroup>
 </Project>
