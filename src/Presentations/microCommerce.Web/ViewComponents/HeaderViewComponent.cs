@@ -5,7 +5,7 @@ namespace microCommerce.Web.ViewComponents
 {
     public class HeaderViewComponent : BaseViewComponent
     {
-        public IViewComponentResult Invoke()
+        public virtual IViewComponentResult Invoke()
         {
             return View();
         }

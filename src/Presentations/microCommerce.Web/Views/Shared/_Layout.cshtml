@@ -1,14 +1,15 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>microCommerce.Web</title>
+    @await Component.InvokeAsync("Head")
 </head>
 <body>
-    @await Component.InvokeAsync("Header")
-    @await Component.InvokeAsync("TopMenu")
-    @RenderBody()
-    @await Component.InvokeAsync("Footer")
+    <div class="super_container">
+        @await Component.InvokeAsync("Header")
+        @await Component.InvokeAsync("TopMenu")
+        @RenderBody()
+        @await Component.InvokeAsync("Footer")
+    </div>
+    @await Component.InvokeAsync("Script")
 </body>
 </html>

@@ -1,6 +1,7 @@
 ﻿using microCommerce.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
+using microCommerce.Mvc.Routing;
 
 namespace microCommerce.Web.Infrastructure
 {
@@ -8,9 +9,19 @@ namespace microCommerce.Web.Infrastructure
     {
         public void RegisterRoutes(IRouteBuilder routeBuilder)
         {
-            //routeBuilder.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
+            routeBuilder.MapRoute(
+                name: "Login",
+                template: "Customer/Login",
+                defaults: new { controller = "Customer", action = "Login" });
+
+            routeBuilder.MapRoute(
+                name: "Register",
+                template: "Customer/Register",
+                defaults: new { controller = "Customer", action = "Register" });
+
+            routeBuilder.MapRoute(
+                name: "HomePage",
+                template: "{controller=Home}/{action=Index}");
         }
 
         public int Priority

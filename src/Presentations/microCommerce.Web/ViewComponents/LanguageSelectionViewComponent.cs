@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace microCommerce.Web.ViewComponents
 {
-    public class FooterViewComponent : BaseViewComponent
+    public class LanguageSelectionViewComponent : BaseViewComponent
     {
         public virtual IViewComponentResult Invoke()
         {
