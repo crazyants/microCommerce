@@ -11,6 +11,8 @@ namespace microCommerce.Web
     {
         public IConfigurationRoot Configuration { get; }
 
+        public IHostingEnvironment Environment { get; }
+
         public Startup(IHostingEnvironment env)
         {
             //create configuration
@@ -20,6 +22,8 @@ namespace microCommerce.Web
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
+
+            Environment = env;
         }
 
         /// <summary>
@@ -28,7 +32,7 @@ namespace microCommerce.Web
         /// <param name="services"></param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            return services.ConfigureServices(Configuration);
+            return services.ConfigureServices(Configuration, Environment);
         }
 
         /// <summary>

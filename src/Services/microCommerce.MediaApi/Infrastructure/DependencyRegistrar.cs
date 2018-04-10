@@ -8,6 +8,7 @@ using microCommerce.Ioc;
 using microCommerce.Logging;
 using microCommerce.MediaApi.Services;
 using microCommerce.MongoDb;
+using microCommerce.Mvc;
 using microCommerce.Redis;
 using Microsoft.Extensions.Configuration;
 using System.Data;
@@ -20,19 +21,27 @@ namespace microCommerce.MediaApi.Infrastructure
         {
             var serviceConfig = config as ServiceConfiguration;
             
-            //cache manager
-            builder.RegisterType<PerRequestCacheManager>().As<ICacheManager>().InstancePerLifetimeScope();
+            //web helper
+            builder.RegisterType<WebHelper>().As<IWebHelper>().InstancePerLifetimeScope();
 
-            //static cache manager
-            if (serviceConfig.UseRedisCaching)
+            if (config.CachingEnabled)
             {
-                //register redis cache manager
-                builder.RegisterInstance(new RedisConnectionWrapper(serviceConfig.RedisConnectionString)).As<IRedisConnectionWrapper>().SingleInstance();
-                builder.RegisterType<RedisCacheManager>().As<IStaticCacheManager>().InstancePerLifetimeScope();
+                //cache manager
+                builder.RegisterType<PerRequestCacheManager>().As<ICacheManager>().InstancePerLifetimeScope();
+
+                //static cache manager
+                if (serviceConfig.UseRedisCaching)
+                {
+                    //register redis cache manager
+                    builder.RegisterInstance(new RedisConnectionWrapper(serviceConfig.RedisConnectionString)).As<IRedisConnectionWrapper>().SingleInstance();
+                    builder.RegisterType<RedisCacheManager>().As<IStaticCacheManager>().InstancePerLifetimeScope();
+                }
+                //register memory cache manager
+                else
+                    builder.RegisterType<MemoryCacheManager>().As<IStaticCacheManager>().SingleInstance();
             }
-            //register memory cache manager
             else
-                builder.RegisterType<MemoryCacheManager>().As<IStaticCacheManager>().SingleInstance();
+                builder.RegisterType<NullCacheManager>().As<ICacheManager>().SingleInstance();
 
             //register logging
             if (serviceConfig.LoggingEnabled)

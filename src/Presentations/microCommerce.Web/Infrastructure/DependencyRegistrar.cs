@@ -3,6 +3,7 @@ using microCommerce.Caching;
 using microCommerce.Common;
 using microCommerce.Common.Configurations;
 using microCommerce.Ioc;
+using microCommerce.Localization;
 using microCommerce.Logging;
 using microCommerce.MongoDb;
 using microCommerce.Mvc;
@@ -21,6 +22,10 @@ namespace microCommerce.Web.Infrastructure
 
             //user agent helper
             builder.RegisterType<UserAgentHelper>().As<IUserAgentHelper>().InstancePerLifetimeScope();
+
+            builder.RegisterType<LocalizationService>().As<ILocalizationService>().InstancePerLifetimeScope();
+            builder.RegisterInstance(new MongoDbContext(config.NoSqlConnectionString)).As<IMongoDbContext>().SingleInstance();
+            builder.RegisterGeneric(typeof(MongoRepository<>)).As(typeof(IMongoRepository<>)).InstancePerLifetimeScope();
 
             if (config.CachingEnabled)
             {
@@ -43,8 +48,6 @@ namespace microCommerce.Web.Infrastructure
             {
                 if (config.UseNoSqlLogging)
                 {
-                    builder.RegisterInstance(new MongoDbContext(config.NoSqlConnectionString)).As<IMongoDbContext>().SingleInstance();
-                    builder.RegisterGeneric(typeof(MongoRepository<>)).As(typeof(IMongoRepository<>)).InstancePerLifetimeScope();
                     builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
                 }
                 else

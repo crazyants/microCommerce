@@ -25,9 +25,23 @@ namespace microCommerce.MediaApi.Controllers
         #region Methods
         [HttpGet]
         [Route("/pictures/{Id:int}")]
-        public virtual IActionResult Get(int Id)
+        public virtual IActionResult GetPictureById(int Id)
         {
             return Json(_pictureService.GetPictureById(Id));
+        }
+
+        [HttpGet]
+        [Route("/pictures")]
+        public virtual IActionResult GetPictures()
+        {
+            var pictures = _pictureService.GetPictures();
+
+            return Json(pictures.Select(x => new
+            {
+                name = x.TitleAttribute,
+                mimeType = x.MimeType,
+                pictureUrl = _pictureService.GetPictureUrl(x)
+            }));
         }
 
         [HttpPost]

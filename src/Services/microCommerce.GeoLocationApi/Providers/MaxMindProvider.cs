@@ -29,7 +29,7 @@ namespace microCommerce.GeoLocationApi.Services
         {
             try
             {
-                var databasePath = CommonHelper.MapPath("~/Country.mmdb");
+                var databasePath = CommonHelper.MapContentPath("~/Country.mmdb");
                 var reader = new DatabaseReader(databasePath);
                 var response = reader.Country(ipAddress);
 

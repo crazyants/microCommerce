@@ -47,9 +47,9 @@ namespace microCommerce.Mvc.Infrastructure
                 if (Singleton<BrowscapXmlHelper>.Instance != null)
                     return Singleton<BrowscapXmlHelper>.Instance;
 
-                var userAgentStringsPath = CommonHelper.MapPath(_config.UserAgentFilePath);
+                var userAgentStringsPath = CommonHelper.MapContentPath(_config.UserAgentFilePath);
                 var crawlerOnlyUserAgentStringsPath = !string.IsNullOrEmpty(_config.CrawlerOnlyUserAgentFilePath)
-                    ? CommonHelper.MapPath(_config.CrawlerOnlyUserAgentFilePath)
+                    ? CommonHelper.MapContentPath(_config.CrawlerOnlyUserAgentFilePath)
                     : string.Empty;
 
                 var browscapXmlHelper = new BrowscapXmlHelper(userAgentStringsPath, crawlerOnlyUserAgentStringsPath);

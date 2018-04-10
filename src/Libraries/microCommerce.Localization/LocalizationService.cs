@@ -69,12 +69,12 @@ namespace microCommerce.Localization
             return await _localizationResourceRepository.GetAsync(lr => lr.LanguageCultureCode == languageCultureCode);
         }
 
-        public virtual async Task<string> GetResourceValue(string name, string defaultValue = null, bool setEmptyIfNotFound = false)
+        public virtual async Task<string> GetResourceValue(string name, string defaultValue = "", bool setEmptyIfNotFound = false)
         {
-            return await GetResourceValue(_workContext.CurrentLanguage.LanguageCulture);
+            return await GetResourceValue(name, _workContext.CurrentLanguage.LanguageCulture, defaultValue, setEmptyIfNotFound);
         }
 
-        public virtual async Task<string> GetResourceValue(string name, string languageCultureCode, string defaultValue = null, bool setEmptyIfNotFound = false)
+        public virtual async Task<string> GetResourceValue(string name, string languageCultureCode, string defaultValue = "", bool setEmptyIfNotFound = false)
         {
             var value = string.Empty;
             if (name == null)

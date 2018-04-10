@@ -1,39 +1,42 @@
-﻿using microCommerce.Common.Configurations;
+﻿using microCommerce.Common;
+using microCommerce.Common.Configurations;
 using microCommerce.Ioc;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.IO;
 using System.Net;
 
 namespace microCommerce.Mvc.Builders
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceProvider ConfigureApiServices(this IServiceCollection services, IConfigurationRoot configuration)
+        public static IServiceProvider ConfigureApiServices(this IServiceCollection services, IConfigurationRoot configuration, IHostingEnvironment environment)
         {
             //add application configuration parameters
             var config = services.ConfigureStartupConfig<ServiceConfiguration>(configuration.GetSection("Service"));
             //add hosting configuration parameters
             services.ConfigureStartupConfig<HostingConfiguration>(configuration.GetSection("Hosting"));
 
+            //set paths the global configuration
+            GlobalConfiguration.ApplicationRootPath = environment.ContentRootPath;
+            GlobalConfiguration.ContentRootPath = environment.WebRootPath;
+            GlobalConfiguration.ModulesRootPath = Path.Combine(environment.ContentRootPath, "Modules");
+
             //create, initialize and configure the engine
             var engine = EngineContext.Create();
-            //engine.Initialize(services);
 
             //most of API providers require TLS 1.2 nowadays
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            
+
             //add mvc engine
-            var mvcBuilder = services.AddMvcCore();
+            services.AddWebApi();
             
-            //add json serializer
-            mvcBuilder.AddJsonFormatters();
-
-            //add api explorer for swagger
-            mvcBuilder.AddApiExplorer();
-
             //add accessor to HttpContext
             services.AddHttpContextAccessor();
 
@@ -44,6 +47,33 @@ namespace microCommerce.Mvc.Builders
             var serviceProvider = engine.RegisterDependencies(services, configuration, config);
 
             return serviceProvider;
+        }
+
+        private static IMvcBuilder AddWebApi(this IServiceCollection services)
+        {
+            var builder = services.AddMvcCore();
+
+            //add formatter mapping
+            builder.AddFormatterMappings();
+
+            //add data annotations
+            builder.AddDataAnnotations();
+
+            //add json serializer
+            builder.AddJsonFormatters();
+
+            //add api explorer for swagger
+            builder.AddApiExplorer();
+
+            return new MvcBuilder(builder.Services, builder.PartManager);
+        }
+
+        private static IMvcBuilder AddWebApi(this IServiceCollection services, Action<MvcOptions> setupAction)
+        {
+            var builder = services.AddWebApi();
+            builder.Services.Configure(setupAction);
+
+            return builder;
         }
 
         private static void AddCustomizedSwagger(this IServiceCollection services, ServiceConfiguration config)

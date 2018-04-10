@@ -10,14 +10,19 @@ namespace microCommerce.GeoLocationApi
     public class Startup
     {
         public IConfigurationRoot Configuration { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
 
         public Startup(IHostingEnvironment env)
         {
+            //create configuration
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
+
+            HostingEnvironment = env;
         }
 
         /// <summary>
@@ -26,7 +31,7 @@ namespace microCommerce.GeoLocationApi
         /// <param name="services"></param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            return services.ConfigureApiServices(Configuration);
+            return services.ConfigureApiServices(Configuration, HostingEnvironment);
         }
 
         /// <summary>
@@ -34,9 +39,9 @@ namespace microCommerce.GeoLocationApi
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            app.ConfigureApiPipeline(env);
+            app.ConfigureApiPipeline(HostingEnvironment);
         }
     }
 }

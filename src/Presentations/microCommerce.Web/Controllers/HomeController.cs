@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using microCommerce.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using microCommerce.Web.Models;
-using microCommerce.Mvc.Controllers;
+using System;
+using System.Linq;
 
 namespace microCommerce.Web.Controllers
 {
@@ -13,7 +9,8 @@ namespace microCommerce.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            return View(assemblies);
         }
     }
 }

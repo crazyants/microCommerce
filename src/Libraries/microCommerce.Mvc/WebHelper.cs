@@ -79,7 +79,7 @@ namespace microCommerce.Mvc
         {
             try
             {
-                File.SetLastWriteTimeUtc(CommonHelper.MapPath("~/web.config"), DateTime.UtcNow);
+                File.SetLastWriteTimeUtc(CommonHelper.MapRootPath("~/web.config"), DateTime.UtcNow);
                 return true;
             }
             catch

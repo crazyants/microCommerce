@@ -251,6 +251,7 @@ namespace microCommerce.Common
                 if (!destinationType.IsInstanceOfType(value))
                     return Convert.ChangeType(value, destinationType, culture);
             }
+
             return value;
         }
 
@@ -271,7 +272,18 @@ namespace microCommerce.Common
         /// </summary>
         /// <param name="path">The path to map. E.g. "~/bin"</param>
         /// <returns>The physical path. E.g. "c:\inetpub\wwwroot\bin"</returns>
-        public static string MapPath(string path)
+        public static string MapRootPath(string path)
+        {
+            path = path.Replace("~/", "").TrimStart('/').Replace('/', '\\');
+            return Path.Combine(GlobalConfiguration.ApplicationRootPath, path);
+        }
+
+        /// <summary>
+        /// Maps a virtual path to a physical disk path.
+        /// </summary>
+        /// <param name="path">The path to map. E.g. "~/bin"</param>
+        /// <returns>The physical path. E.g. "c:\inetpub\wwwroot\bin"</returns>
+        public static string MapContentPath(string path)
         {
             path = path.Replace("~/", "").TrimStart('/').Replace('/', '\\');
             return Path.Combine(GlobalConfiguration.ContentRootPath, path);

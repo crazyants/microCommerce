@@ -27,6 +27,9 @@ namespace microCommerce.Mvc.Builders
             //handle 404 errors (not found)
             app.UseCustomPageNotFound();
 
+            //use session storage
+            app.UseSession();
+
             //use mvc engine
             app.UseMvc(RegisterRoutes);
 

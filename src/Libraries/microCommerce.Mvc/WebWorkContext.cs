@@ -1,7 +1,6 @@
 using microCommerce.Common;
 using microCommerce.Domain.Customers;
 using microCommerce.Domain.Globalization;
-using microCommerce.Mvc.UI;
 
 namespace microCommerce.Mvc
 {
@@ -23,7 +22,7 @@ namespace microCommerce.Mvc
         {
             get
             {
-                return null;
+                return new Customer { FirstName = "Sefa", LastName = "Can", Email = "fsefacan@gmail.com", UserName = "sefacan" };
             }
             set
             {
@@ -35,7 +34,7 @@ namespace microCommerce.Mvc
         {
             get
             {
-                return null;
+                return new Language { LanguageCulture = "tr-TR", UniqueSeoCode = "tr" };
             }
             set
             {
@@ -47,7 +46,7 @@ namespace microCommerce.Mvc
         {
             get
             {
-                return null;
+                return new Currency { CurrencyCode = "TRY", Name = "Türk Lirasý" };
             }
             set
             {

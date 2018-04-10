@@ -11,14 +11,19 @@ namespace microCommerce.Admin
     {
         public IConfigurationRoot Configuration { get; }
 
+        public IHostingEnvironment Environment { get; }
+
         public Startup(IHostingEnvironment env)
         {
             //create configuration
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
+
+            Environment = env;
         }
 
         /// <summary>
@@ -27,7 +32,7 @@ namespace microCommerce.Admin
         /// <param name="services"></param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            return services.ConfigureServices(Configuration);
+            return services.ConfigureServices(Configuration, Environment);
         }
 
         /// <summary>

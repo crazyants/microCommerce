@@ -28,7 +28,7 @@
         public string DatabaseProviderName { get; set; }
 
         /// <summary>
-        /// Gets or sets data caching enabled
+        /// Gets or sets data caching enabled for database performance
         /// </summary>
         public bool CachingEnabled { get; set; }
 
@@ -36,6 +36,11 @@
         /// Gets or sets redis caching enabled
         /// </summary>
         public bool UseRedisCaching { get; set; }
+
+        /// <summary>
+        /// Gets or sets redis database index
+        /// </summary>
+        public int CacheDatabaseIndex { get; set; }
 
         /// <summary>
         /// Gets or sets redis connection string
@@ -48,17 +53,32 @@
         public string PersistDataProtectionKeys { get; set; }
 
         /// <summary>
+        /// Gets or sets redis session storage
+        /// </summary>
+        public bool UseRedisSession { get; set; }
+
+        /// <summary>
+        /// Gets or sets redis session database index
+        /// </summary>
+        public int SessionDatabaseIndex { get; set; }
+
+        /// <summary>
         /// Logging error, info, warning messages enabled
         /// </summary>
         public bool LoggingEnabled { get; set; }
 
         /// <summary>
-        /// Use nosql for logging
+        /// Use no sql for logging
         /// </summary>
         public bool UseNoSqlLogging { get; set; }
 
         /// <summary>
-        /// Gets or sets nosql connection string
+        /// Gets or sets logging database name
+        /// </summary>
+        public bool LoggingDatabaseName { get; set; }
+
+        /// <summary>
+        /// Gets or sets no sql connection string
         /// </summary>
         public string NoSqlConnectionString { get; set; }
     }

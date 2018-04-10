@@ -1,4 +1,5 @@
 ﻿using microCommerce.Caching;
+using microCommerce.Common.Configurations;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
@@ -10,21 +11,23 @@ namespace microCommerce.Redis
     public class RedisCacheManager : IStaticCacheManager
     {
         #region Fields
+        private readonly IAppConfiguration _config;
         private readonly IStaticCacheManager _perRequestCacheManager;
         private readonly IRedisConnectionWrapper _connectionWrapper;
         private readonly IDatabase _database;
         #endregion
 
         #region Ctor
-        public RedisCacheManager(IStaticCacheManager perRequestCacheManager,
+        public RedisCacheManager(IAppConfiguration config, IStaticCacheManager perRequestCacheManager,
             IRedisConnectionWrapper connectionWrapper)
         {
+            _config = config;
             _perRequestCacheManager = perRequestCacheManager;
 
             // ConnectionMultiplexer.Connect should only be called once and shared between callers
             _connectionWrapper = connectionWrapper;
 
-            _database = _connectionWrapper.GetDatabase();
+            _database = _connectionWrapper.GetDatabase(_config.CacheDatabaseIndex);
         }
         #endregion
 

@@ -13,6 +13,11 @@
         bool UseRedisCaching { get; set; }
 
         /// <summary>
+        /// Gets or sets redis database index
+        /// </summary>
+        int CacheDatabaseIndex { get; set; }
+
+        /// <summary>
         /// Gets or sets redis connection string
         /// </summary>
         string RedisConnectionString { get; set; }
@@ -23,6 +28,16 @@
         string PersistDataProtectionKeys { get; set; }
 
         /// <summary>
+        /// Gets or sets redis session storage
+        /// </summary>
+        bool UseRedisSession { get; set; }
+
+        /// <summary>
+        /// Gets or sets redis session database index
+        /// </summary>
+        int SessionDatabaseIndex { get; set; }
+
+        /// <summary>
         /// Logging error, info, warning messages enabled
         /// </summary>
         bool LoggingEnabled { get; set; }
@@ -31,6 +46,11 @@
         /// Use no sql for logging
         /// </summary>
         bool UseNoSqlLogging { get; set; }
+
+        /// <summary>
+        /// Gets or sets logging database name
+        /// </summary>
+        bool LoggingDatabaseName { get; set; }
 
         /// <summary>
         /// Gets or sets no sql connection string
