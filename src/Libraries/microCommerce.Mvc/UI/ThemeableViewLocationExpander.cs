@@ -8,6 +8,7 @@ namespace microCommerce.Mvc.UI
     public class ThemeableViewLocationExpander : IViewLocationExpander
     {
         private const string THEME_KEY = "application_theme_name";
+
         public void PopulateValues(ViewLocationExpanderContext context)
         {
             var serviceProvider = context.ActionContext.HttpContext.RequestServices;
