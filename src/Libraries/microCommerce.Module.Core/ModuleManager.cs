@@ -6,35 +6,63 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 
 namespace microCommerce.Module.Core
 {
     public class ModuleManager
     {
+        #region Fields
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim();
-
-        /// <summary>
-        /// Gets the modules directory path
-        /// </summary>
-        public const string ModulesPath = "~/Modules";
-
-        /// <summary>
-        /// Gets the installed module file path
-        /// </summary>
-        public const string InstalledModuleFilePath = "~/Modules/InstalledModules.json";
-
-        /// <summary>
-        /// Gets the module manifest file
-        /// </summary>
-        public const string ModuleInfoFileName = "module.json";
 
         /// <summary>
         /// Returns a collection of all loaded modules that have been shadow copied
         /// </summary>
         public static IList<ModuleInfo> LoadedModules { get; set; }
+        #endregion
 
+        #region Utilities
+        private static Assembly DeployModule(ApplicationPartManager applicationPartManager, FileInfo moduleFile)
+        {
+            Assembly assembly = null;
+            try
+            {
+                assembly = Assembly.LoadFrom(moduleFile.FullName);
+            }
+            catch (FileLoadException) { throw; }
+
+            if (assembly != null)
+            {
+                var assemblyPart = new AssemblyPart(assembly);
+                if (!applicationPartManager.ApplicationParts.Contains(assemblyPart))
+                    applicationPartManager.ApplicationParts.Add(assemblyPart);
+            }
+
+            return assembly;
+        }
+
+        private static void SaveInstalledToFile(IList<string> moduleSystemNames, string filePath)
+        {
+            var text = JsonConvert.SerializeObject(moduleSystemNames, Formatting.Indented);
+            File.WriteAllText(filePath, text);
+        }
+
+        private static IList<string> GetInstalledFile(string filePath)
+        {
+            FileEnsureCreated(filePath);
+
+            var text = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<IList<string>>(text) ?? new List<string>();
+        }
+
+        private static void FileEnsureCreated(string filePath)
+        {
+            if (!File.Exists(filePath))
+                using (File.Create(filePath)) { }
+        }
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Initialize the module manager
         /// </summary>
@@ -90,38 +118,77 @@ namespace microCommerce.Module.Core
             }
         }
 
-        private static Assembly DeployModule(ApplicationPartManager applicationPartManager, FileInfo moduleFile)
+        public static void MarkAsInstalled(string systemName)
         {
-            Assembly assembly = null;
-            try
-            {
-                assembly = Assembly.LoadFrom(moduleFile.FullName);
-            }
-            catch (FileLoadException) { throw; }
+            if (string.IsNullOrEmpty(systemName))
+                throw new ArgumentNullException(nameof(systemName));
 
-            if (assembly != null)
-            {
-                var assemblyPart = new AssemblyPart(assembly);
-                if (!applicationPartManager.ApplicationParts.Contains(assemblyPart))
-                    applicationPartManager.ApplicationParts.Add(assemblyPart);
-            }
+            string filePath = CommonHelper.MapRootPath(InstalledModuleFilePath);
+            FileEnsureCreated(filePath);
 
-            return assembly;
+            //gets the installed module system names
+            var installedModules = GetInstalledFile(CommonHelper.MapRootPath(InstalledModuleFilePath));
+
+            var alreadyInstalled = installedModules.Any(m => m.Equals(systemName, StringComparison.InvariantCultureIgnoreCase));
+            if (!alreadyInstalled)
+                installedModules.Add(systemName);
+
+            SaveInstalledToFile(installedModules, filePath);
         }
 
-        private static void SaveInstalledToFile(IList<string> moduleSystemNames, string filePath)
+        public static void MarkAsUninstalled(string systemName)
         {
-            var text = JsonConvert.SerializeObject(moduleSystemNames, Formatting.Indented);
+            if (string.IsNullOrEmpty(systemName))
+                throw new ArgumentNullException(nameof(systemName));
+
+            string filePath = CommonHelper.MapRootPath(InstalledModuleFilePath);
+            FileEnsureCreated(filePath);
+
+            //gets the installed module system names
+            var installedModules = GetInstalledFile(CommonHelper.MapRootPath(InstalledModuleFilePath));
+
+            var alreadyInstalled = installedModules.Any(m => m.Equals(systemName, StringComparison.InvariantCultureIgnoreCase));
+            if (alreadyInstalled)
+                installedModules.Remove(systemName);
+
+            SaveInstalledToFile(installedModules, filePath);
+        }
+
+        public static void SaveModuleInfoFile(ModuleInfo moduleInfo)
+        {
+            if(moduleInfo == null)
+                throw new ArgumentException(nameof(moduleInfo));
+
+            //get the description file path
+            if (moduleInfo.AssemblyFileInfo == null)
+                throw new Exception($"Cannot load assembly path for {moduleInfo.SystemName} module.");
+
+            var filePath = Path.Combine(moduleInfo.AssemblyFileInfo.Directory.FullName, ModuleInfoFileName);
+            if (!File.Exists(filePath))
+                throw new Exception($"ModuleInfo file for {moduleInfo.SystemName} module does not exist. {filePath}");
+
+            //save the file
+            var text = JsonConvert.SerializeObject(moduleInfo, Formatting.Indented);
             File.WriteAllText(filePath, text);
         }
+        #endregion
 
-        private static IList<string> GetInstalledFile(string filePath)
-        {
-            if (!File.Exists(filePath))
-                File.WriteAllLines(filePath, new[] { "" }, Encoding.UTF8);
+        #region Properties
+        /// <summary>
+        /// Gets the modules directory path
+        /// </summary>
+        public const string ModulesPath = "~/Modules";
 
-            var text = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<IList<string>>(text) ?? new List<string>();
-        }
+        /// <summary>
+        /// Gets the installed module file path
+        /// </summary>
+        public const string InstalledModuleFilePath = "~/Modules/InstalledModules.json";
+
+        /// <summary>
+        /// Gets the module manifest file
+        /// </summary>
+        public const string ModuleInfoFileName = "module.json";
+
+        #endregion
     }
 }

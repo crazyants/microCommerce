@@ -9,10 +9,16 @@ namespace microCommerce.Admin
 {
     public class Startup
     {
+        /// <summary>
+        /// Gets the application configuration
+        /// </summary>
         public IConfigurationRoot Configuration { get; }
 
+        /// <summary>
+        /// Gets the hosting environments
+        /// </summary>
         public IHostingEnvironment Environment { get; }
-
+        
         public Startup(IHostingEnvironment env)
         {
             //create configuration
@@ -40,9 +46,9 @@ namespace microCommerce.Admin
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            app.ConfigurePipeline(env);
+            app.ConfigurePipeline(Environment);
         }
     }
 }

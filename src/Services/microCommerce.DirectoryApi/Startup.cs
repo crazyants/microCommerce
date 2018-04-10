@@ -9,8 +9,15 @@ namespace microCommerce.DirectoryApi
 {
     public class Startup
     {
+        /// <summary>
+        /// Gets the application configuration
+        /// </summary>
         public IConfigurationRoot Configuration { get; }
-        public IHostingEnvironment HostingEnvironment { get; }
+
+        /// <summary>
+        /// Gets the hosting environments
+        /// </summary>
+        public IHostingEnvironment Environment { get; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -22,7 +29,7 @@ namespace microCommerce.DirectoryApi
                 .AddEnvironmentVariables()
                 .Build();
 
-            HostingEnvironment = env;
+            Environment = env;
         }
 
         /// <summary>
@@ -31,7 +38,7 @@ namespace microCommerce.DirectoryApi
         /// <param name="services"></param>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            return services.ConfigureApiServices(Configuration, HostingEnvironment);
+            return services.ConfigureApiServices(Configuration, Environment);
         }
 
         /// <summary>
@@ -41,7 +48,7 @@ namespace microCommerce.DirectoryApi
         /// <param name="env"></param>
         public void Configure(IApplicationBuilder app)
         {
-            app.ConfigureApiPipeline(HostingEnvironment);
+            app.ConfigureApiPipeline(Environment);
         }
     }
 }
