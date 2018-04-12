@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using microCommerce.Ioc;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Reflection;
 
 namespace microCommerce.Module.Core
 {
-    public class ModuleInfo: IComparable<ModuleInfo>
+    public class ModuleInfo : IComparable<ModuleInfo>
     {
         /// <summary>
         /// Gets or sets the friendly module name
@@ -52,6 +53,30 @@ namespace microCommerce.Module.Core
         [JsonIgnore]
         public Assembly Assembly { get; set; }
 
+        /// <summary>
+        /// Gets or sets the module type
+        /// </summary>
+        [JsonIgnore]
+        public Type ModuleType { get; set; }
+
+        public virtual T Instance<T>() where T : class, IModule
+        {
+            object instance = null;
+            try
+            {
+                instance = EngineContext.Current.Resolve(ModuleType);
+            }
+            catch { }
+
+            if (instance == null)
+                instance = EngineContext.Current.ResolveUnregistered(ModuleType);
+
+            var typedInstance = instance as T;
+            if (typedInstance != null)
+                typedInstance.ModuleInfo = this;
+
+            return typedInstance;
+        }
 
         /// <summary>
         /// Compares this instance with a specified ModuleInfo object

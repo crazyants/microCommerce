@@ -111,6 +111,10 @@ namespace microCommerce.Module.Core
                     foreach (var moduleFileInfo in readyToDeployModules)
                         DeployModule(applicationPartManager, moduleFileInfo);
 
+                    var type = moduleInfo.Assembly.GetTypes().FirstOrDefault(t => typeof(IModule).IsAssignableFrom(t));
+                    if (!type.IsInterface && !type.IsAbstract && type.IsClass)
+                        moduleInfo.ModuleType = type;
+
                     loadedModules.Add(moduleInfo);
                 }
 
@@ -127,7 +131,7 @@ namespace microCommerce.Module.Core
             FileEnsureCreated(filePath);
 
             //gets the installed module system names
-            var installedModules = GetInstalledFile(CommonHelper.MapRootPath(InstalledModuleFilePath));
+            var installedModules = GetInstalledFile(filePath);
 
             var alreadyInstalled = installedModules.Any(m => m.Equals(systemName, StringComparison.InvariantCultureIgnoreCase));
             if (!alreadyInstalled)
@@ -145,7 +149,7 @@ namespace microCommerce.Module.Core
             FileEnsureCreated(filePath);
 
             //gets the installed module system names
-            var installedModules = GetInstalledFile(CommonHelper.MapRootPath(InstalledModuleFilePath));
+            var installedModules = GetInstalledFile(filePath);
 
             var alreadyInstalled = installedModules.Any(m => m.Equals(systemName, StringComparison.InvariantCultureIgnoreCase));
             if (alreadyInstalled)
@@ -156,7 +160,7 @@ namespace microCommerce.Module.Core
 
         public static void SaveModuleInfoFile(ModuleInfo moduleInfo)
         {
-            if(moduleInfo == null)
+            if (moduleInfo == null)
                 throw new ArgumentException(nameof(moduleInfo));
 
             //get the description file path

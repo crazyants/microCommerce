@@ -3,7 +3,7 @@ using System;
 
 namespace microCommerce.Payment.CreditCard
 {
-    public class CreditCardModule : IModule
+    public class CreditCardModule : IPaymentModule
     {
         public void Install()
         {

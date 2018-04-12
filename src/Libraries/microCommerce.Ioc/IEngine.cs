@@ -28,7 +28,7 @@ namespace microCommerce.Ioc
         /// <param name="type">Type of resolved service</param>
         /// <returns>Resolved service</returns>
         object Resolve(Type type);
-
+        
         /// <summary>
         /// Resolve dependencies
         /// </summary>

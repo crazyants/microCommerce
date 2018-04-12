@@ -5,6 +5,7 @@ using microCommerce.Common.Configurations;
 using microCommerce.Ioc;
 using microCommerce.Localization;
 using microCommerce.Logging;
+using microCommerce.Module.Core;
 using microCommerce.MongoDb;
 using microCommerce.Mvc;
 using microCommerce.Mvc.Infrastructure;
@@ -56,6 +57,10 @@ namespace microCommerce.Web.Infrastructure
             else
                 builder.RegisterType<NullLogger>().As<ILogger>().InstancePerLifetimeScope();
 
+            //module features
+            builder.RegisterType<ModuleLoader>().As<IModuleLoader>().InstancePerLifetimeScope();
+
+            //work context
             builder.RegisterType<WebWorkContext>().As<IWorkContext>().InstancePerLifetimeScope();
         }
 

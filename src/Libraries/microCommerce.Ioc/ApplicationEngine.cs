@@ -18,7 +18,7 @@ namespace microCommerce.Ioc
         #endregion
 
         #region Utilities
-        protected IServiceProvider GetServiceProvider
+        protected virtual IServiceProvider GetServiceProvider
         {
             get
             {
@@ -29,8 +29,8 @@ namespace microCommerce.Ioc
             }
         }
         #endregion
-        
-        public IServiceProvider RegisterDependencies(IServiceCollection services, IConfigurationRoot configuration, IAppConfiguration config)
+
+        public virtual IServiceProvider RegisterDependencies(IServiceCollection services, IConfigurationRoot configuration, IAppConfiguration config)
         {
             var containerBuilder = new ContainerBuilder();
 
@@ -69,13 +69,13 @@ namespace microCommerce.Ioc
 
             return _serviceProvider;
         }
-        
+
         /// <summary>
         /// Gets the instance by generic type from ioc container
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T Resolve<T>() where T : class
+        public virtual T Resolve<T>() where T : class
         {
             return GetServiceProvider.GetRequiredService(typeof(T)) as T;
         }
@@ -85,17 +85,17 @@ namespace microCommerce.Ioc
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public object Resolve(Type type)
+        public virtual object Resolve(Type type)
         {
             return GetServiceProvider.GetRequiredService(type);
         }
-
+        
         /// <summary>
         /// Gets the multiple instance by generic type from ioc container
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IEnumerable<T> ResolveAll<T>()
+        public virtual IEnumerable<T> ResolveAll<T>()
         {
             return GetServiceProvider.GetServices(typeof(T)) as IEnumerable<T>;
         }
@@ -105,7 +105,7 @@ namespace microCommerce.Ioc
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public object ResolveUnregistered(Type type)
+        public virtual object ResolveUnregistered(Type type)
         {
             Exception innerException = null;
             foreach (var constructor in type.GetConstructors())

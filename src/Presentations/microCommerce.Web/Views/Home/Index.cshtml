@@ -1,7 +1,7 @@
-﻿@model IList<System.Reflection.Assembly>
+﻿@model IList<microCommerce.Module.Core.IPaymentModule>
 @foreach (var item in Model)
 {
-    <p>@item.FullName</p>
+    <p>@item.ModuleInfo.Description</p>
 }
 <!-- Slider -->
 	<div class="main_slider" style="background-image:url(/images/slider_1.jpg)">
