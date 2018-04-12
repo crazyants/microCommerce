@@ -39,7 +39,7 @@ namespace microCommerce.Mvc.Builders
             var builder = services.AddMvc();
 
             //add module features support
-            builder.AddModuleFeatures();
+            builder.AddModuleFeatures(services);
 
             //add response compression
             services.AddResponseCompression();
@@ -63,8 +63,14 @@ namespace microCommerce.Mvc.Builders
             return engine.RegisterDependencies(services, configuration, config);
         }
 
-        private static IMvcBuilder AddModuleFeatures(this IMvcBuilder builder)
+        private static IMvcBuilder AddModuleFeatures(this IMvcBuilder builder, IServiceCollection services)
         {
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.ViewLocationExpanders.Clear();
+                options.ViewLocationExpanders.Add(new ModuleViewLocationExpander());
+            });
+
             builder.ConfigureApplicationPartManager(manager => ModuleManager.Initialize(manager));
 
             return builder;
@@ -74,7 +80,6 @@ namespace microCommerce.Mvc.Builders
         {
             services.Configure<RazorViewEngineOptions>(options =>
             {
-                options.ViewLocationExpanders.Clear();
                 options.ViewLocationExpanders.Add(new BaseViewLocationExpander());
             });
         }
