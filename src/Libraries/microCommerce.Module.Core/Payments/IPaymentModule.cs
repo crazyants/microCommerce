@@ -1,4 +1,5 @@
 ﻿using microCommerce.Domain.Basket;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace microCommerce.Module.Core.Payments
@@ -9,8 +10,14 @@ namespace microCommerce.Module.Core.Payments
 
         void PaymentProcess(PaymentProcessRequest request);
 
+        IList<string> ValidateForm(IFormCollection form);
+
+        PaymentConfirmRequest GetPaymentConfirmRequest(IFormCollection form);
+
         decimal GetAdditionalFee(IList<BasketItem> basketItems);
 
+        string GetViewComponent();
 
+        string GetConfigureUrl();
     }
 }

@@ -16,9 +16,24 @@ namespace microCommerce.Module.Core
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim();
 
         /// <summary>
-        /// Returns a collection of all loaded modules that have been shadow copied
+        /// Returns a collection of all loaded modules
         /// </summary>
         public static IList<ModuleInfo> LoadedModules { get; set; }
+
+        /// <summary>
+        /// Gets the modules directory path
+        /// </summary>
+        private const string ModulesPath = "~/Modules";
+
+        /// <summary>
+        /// Gets the installed module file path
+        /// </summary>
+        private const string InstalledModuleFilePath = "~/Modules/InstalledModules.json";
+
+        /// <summary>
+        /// Gets the module manifest file
+        /// </summary>
+        private const string ModuleInfoFileName = "module.json";
         #endregion
 
         #region Utilities
@@ -175,24 +190,6 @@ namespace microCommerce.Module.Core
             var text = JsonConvert.SerializeObject(moduleInfo, Formatting.Indented);
             File.WriteAllText(filePath, text);
         }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets the modules directory path
-        /// </summary>
-        public const string ModulesPath = "~/Modules";
-
-        /// <summary>
-        /// Gets the installed module file path
-        /// </summary>
-        public const string InstalledModuleFilePath = "~/Modules/InstalledModules.json";
-
-        /// <summary>
-        /// Gets the module manifest file
-        /// </summary>
-        public const string ModuleInfoFileName = "module.json";
-
         #endregion
     }
 }

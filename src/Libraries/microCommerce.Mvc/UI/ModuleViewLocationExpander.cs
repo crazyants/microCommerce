@@ -1,6 +1,4 @@
-﻿using microCommerce.Mvc.Controllers;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Controllers;
+﻿using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +17,6 @@ namespace microCommerce.Mvc.UI
                 //From the type info you should be able to get the assembly
                 var controllerAssemblyName = controllerTypeInfo.AsType().Assembly;
             }
-
         }
 
         /// <summary>

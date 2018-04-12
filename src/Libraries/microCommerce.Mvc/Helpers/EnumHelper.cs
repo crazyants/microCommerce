@@ -1,4 +1,3 @@
-using microCommerce.Caching;
 using microCommerce.Common;
 using microCommerce.Ioc;
 using microCommerce.Localization;
@@ -35,13 +34,10 @@ namespace microCommerce.Mvc.Helpers
         public static string GetLocalizedName(this Enum value, string cultureCode)
         {
             var localization = EngineContext.Current.Resolve<ILocalizationService>();
-            var cacheManager = EngineContext.Current.Resolve<ICacheManager>();
             var workContext = EngineContext.Current.Resolve<IWorkContext>();
             string displayName = value.GetDisplayName();
-            string str = string.Format("language.resources-{0}-{1}", displayName, workContext.CurrentLanguage.LanguageCulture);
-            return cacheManager.Get<string>(str, () => {
-                return localization.GetLocalizationResourceByName(displayName, workContext.CurrentLanguage.LanguageCulture).Result.Value;
-            });
+
+            return localization.GetResourceValue(displayName, workContext.CurrentLanguage.LanguageCulture, displayName).Result;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace microCommerce.Mvc.UI
         {
             var serviceProvider = context.ActionContext.HttpContext.RequestServices;
             var workContext = serviceProvider.GetService(typeof(IWorkContext)) as IWorkContext;
-            context.Values[THEME_KEY] = workContext.CurrentTheme.Name;
+            context.Values[THEME_KEY] = workContext.CurrentTheme?.Name;
         }
 
         /// <summary>

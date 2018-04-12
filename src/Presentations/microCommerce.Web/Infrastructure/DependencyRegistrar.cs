@@ -58,7 +58,7 @@ namespace microCommerce.Web.Infrastructure
                 builder.RegisterType<NullLogger>().As<ILogger>().InstancePerLifetimeScope();
 
             //module features
-            builder.RegisterType<ModuleLoader>().As<IModuleLoader>().InstancePerLifetimeScope();
+            builder.RegisterType<ModuleProvider>().As<IModuleProvider>().InstancePerLifetimeScope();
 
             //work context
             builder.RegisterType<WebWorkContext>().As<IWorkContext>().InstancePerLifetimeScope();

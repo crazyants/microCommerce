@@ -11,7 +11,6 @@ namespace microCommerce.Dapper.Providers.MySql
     public class MySqlDataProvider : IDataProvider
     {
         #region Constant
-
         private const string INSERT_QUERY = "INSERT INTO `{0}` ({1}) VALUES(@{2}) SELECT LAST_INSERT_ID()";
         private const string INSERT_BULK_QUERY = "INSERT INTO `{0}` ({1}) VALUES ({2})\r\n";
         private const string UPDATE_QUERY = "UPDATE `{0}` SET {1} WHERE `Id` = @Id";
@@ -21,11 +20,9 @@ namespace microCommerce.Dapper.Providers.MySql
         private const string SELECT_FIRST_QUERY = "SELECT\r\n{1} FROM `{0}` WHERE `Id` = @Id LIMIT 1";
         private const string EXISTING_QUERY = "SELECT CASE WHEN EXISTS (SELECT Id FROM `{0}` WHERE `Id` = @Id) THEN 1 ELSE 0 END";
         private const string COUNT_QUERY = "SELECT COUNT(`Id`) FROM `{0}}`";
-
         #endregion
 
         #region Methods
-
         public virtual IDbConnection CreateConnection(string connectionString)
         {
             return new MySqlConnection(connectionString);

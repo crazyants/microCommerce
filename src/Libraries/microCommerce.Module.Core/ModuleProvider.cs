@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace microCommerce.Module.Core
 {
-    public class ModuleLoader : IModuleLoader
+    public class ModuleProvider : IModuleProvider
     {
         #region Fields
         private IList<ModuleInfo> _modules;

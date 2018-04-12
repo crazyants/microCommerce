@@ -2,7 +2,7 @@
 
 namespace microCommerce.Module.Core
 {
-    public interface IModuleLoader
+    public interface IModuleProvider
     {
         /// <summary>
         /// Loads the modules

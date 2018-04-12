@@ -1,4 +1,5 @@
 ﻿using microCommerce.Module.Core;
+using microCommerce.Module.Core.Payments;
 using microCommerce.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,9 +7,9 @@ namespace microCommerce.Web.Controllers
 {
     public class HomeController : FrontBaseController
     {
-        private readonly IModuleLoader _moduleLoader;
+        private readonly IModuleProvider _moduleLoader;
 
-        public HomeController(IModuleLoader moduleLoader)
+        public HomeController(IModuleProvider moduleLoader)
         {
             _moduleLoader = moduleLoader;
         }
