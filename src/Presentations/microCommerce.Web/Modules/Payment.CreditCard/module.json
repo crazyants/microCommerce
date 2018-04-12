@@ -1,8 +1,0 @@
-﻿{
-  "FriendlyName": "Credit Card",
-  "SystemName": "Payment.CreditCard",
-  "AssemblyFileName": "microCommerce.Payment.CreditCard.dll",
-  "Version": "1.00",
-  "Description": "Credit Card module",
-  "Priority": 0
-}
