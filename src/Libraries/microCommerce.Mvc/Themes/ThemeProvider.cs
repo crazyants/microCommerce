@@ -26,7 +26,10 @@ namespace microCommerce.Mvc.Themes
         /// </summary>
         private const string ThemeInfoFileName = "theme.json";
 
-        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim();
+        /// <summary>
+        /// Lock object for per thread
+        /// </summary>
+        private static readonly ReaderWriterLockSlim _locker = new ReaderWriterLockSlim();
         #endregion
 
         #region Methods
@@ -52,7 +55,7 @@ namespace microCommerce.Mvc.Themes
         {
             if (_themes == null)
             {
-                using (new WriteLockDisposable(Locker))
+                using (new WriteLockDisposable(_locker))
                 {
                     //load all theme descriptors
                     var themeFolder = new DirectoryInfo(CommonHelper.MapRootPath(ThemesPath));

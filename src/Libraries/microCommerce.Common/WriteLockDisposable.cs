@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace microCommerce.Mvc.Themes
+namespace microCommerce.Common
 {
     public class WriteLockDisposable : IDisposable
     {

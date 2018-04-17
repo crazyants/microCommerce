@@ -13,7 +13,10 @@ namespace microCommerce.Module.Core
     public class ModuleManager
     {
         #region Fields
-        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim();
+        /// <summary>
+        /// Lock object for per thread
+        /// </summary>
+        private static readonly ReaderWriterLockSlim _locker = new ReaderWriterLockSlim();
 
         /// <summary>
         /// Returns a collection of all loaded modules
@@ -87,7 +90,7 @@ namespace microCommerce.Module.Core
             if (applicationPartManager == null)
                 throw new ArgumentNullException(nameof(applicationPartManager));
 
-            using (new WriteLockDisposable(Locker))
+            using (new WriteLockDisposable(_locker))
             {
                 var loadedModules = new List<ModuleInfo>();
 
@@ -137,6 +140,10 @@ namespace microCommerce.Module.Core
             }
         }
 
+        /// <summary>
+        /// Modules mark as installed
+        /// </summary>
+        /// <param name="systemName"></param>
         public static void MarkAsInstalled(string systemName)
         {
             if (string.IsNullOrEmpty(systemName))
@@ -155,6 +162,10 @@ namespace microCommerce.Module.Core
             SaveInstalledToFile(installedModules, filePath);
         }
 
+        /// <summary>
+        /// Modules mark as uninstalled
+        /// </summary>
+        /// <param name="systemName"></param>
         public static void MarkAsUninstalled(string systemName)
         {
             if (string.IsNullOrEmpty(systemName))
@@ -173,6 +184,10 @@ namespace microCommerce.Module.Core
             SaveInstalledToFile(installedModules, filePath);
         }
 
+        /// <summary>
+        /// Update module info json file
+        /// </summary>
+        /// <param name="moduleInfo"></param>
         public static void SaveModuleInfoFile(ModuleInfo moduleInfo)
         {
             if (moduleInfo == null)
