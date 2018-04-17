@@ -23,23 +23,39 @@ namespace microCommerce.Domain.Globalization
         public int NumericIsoCode { get; set; }
 
         /// <summary>
+        /// Gets or sets the dial code
+        /// </summary>
+        public string DialCode { get; set; }
+
+        /// <summary>
         /// Gets or sets the default currency identifier
         /// </summary>
-        public int? DefaultCurrencyId { get; set; }
+        public int? CurrencyId { get; set; }
 
         /// <summary>
         /// Gets or sets the default language identifier
         /// </summary>
-        public int? DefaultLanguageId { get; set; }
+        public int? LanguageId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the allow billing for order
+        /// </summary>
+        public bool AllowBilling { get; set; }
+
+        /// <summary>
+        /// Gets or sets the allow shipping for order
+        /// </summary>
+        public bool AllowShipping { get; set; }
+
+        /// <summary>
+        /// Gets or sets the display order
+        /// </summary>
+        public int DisplayOrder { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the entity is published
         /// </summary>
         public bool Published { get; set; }
 
-        /// <summary>
-        /// Gets or sets the display order
-        /// </summary>
-        public int DisplayOrder { get; set; }
     }
 }

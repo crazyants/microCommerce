@@ -210,6 +210,9 @@ namespace microCommerce.Mvc
         public virtual string GetCurrentHost(bool useSsl)
         {
             var result = string.Empty;
+            
+            if (!IsRequestAvailable())
+                return result;
 
             //try to get host from the request HOST header
             var hostHeader = _httpContextAccessor.HttpContext.Request.Headers[HeaderNames.Host];

@@ -35,7 +35,7 @@ namespace microCommerce.Mvc.Builders
 
             //use static files
             app.UseStaticFiles();
-            
+
             //set culture by user data
             //app.UseCulture();
         }
@@ -124,26 +124,12 @@ namespace microCommerce.Mvc.Builders
                     var webHelper = EngineContext.Current.Resolve<IWebHelper>();
                     if (!webHelper.IsStaticResource())
                     {
-                        //get original path and query
-                        var originalPath = context.HttpContext.Request.Path;
-                        var originalQueryString = context.HttpContext.Request.QueryString;
-
                         //get new path
                         context.HttpContext.Request.Path = "/notfound.html";
                         context.HttpContext.Request.QueryString = QueryString.Empty;
 
-                        try
-                        {
-                            //re-execute request with new path
-                            await context.Next(context.HttpContext);
-                        }
-                        finally
-                        {
-                            //return original path to request
-                            context.HttpContext.Request.QueryString = originalQueryString;
-                            context.HttpContext.Request.Path = originalPath;
-                            context.HttpContext.Features.Set<IStatusCodeReExecuteFeature>(null);
-                        }
+                        //re-execute request with new path
+                        await context.Next(context.HttpContext);
                     }
                 }
             });

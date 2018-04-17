@@ -69,11 +69,17 @@ namespace microCommerce.Dapper
                     if (attribute == null)
                         parameters.Add(prop.Name);
                 }
+
+                if (parameters.Contains("Id"))
+                {
+                    parameters.Remove("Id");
+
+                    if (includeIdentity)
+                        parameters.Insert(0, "Id");
+                }
+
                 _cachedParameters[entityType] = parameters;
             }
-
-            if (!includeIdentity)
-                return parameters.Where(p => p != "Id");
 
             return parameters;
         }

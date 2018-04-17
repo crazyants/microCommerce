@@ -1,0 +1,5 @@
+@model IList<microCommerce.Module.Core.Payments.IPaymentModule>
+@foreach (var item in Model)
+{
+    <p>@item.ModuleInfo.Description</p>
+}

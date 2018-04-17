@@ -20,7 +20,7 @@ namespace microCommerce.Mvc.UI
 
                     _localizer = (format, args) =>
                     {
-                        var resFormat = _localizationService.GetResourceValue(format).Result;
+                        string resFormat = _localizationService.GetResourceValue(format).Result;
                         if (string.IsNullOrEmpty(resFormat))
                         {
                             return new LocalizedString(format);

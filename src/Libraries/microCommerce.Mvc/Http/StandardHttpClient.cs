@@ -13,17 +13,18 @@ namespace microCommerce.Mvc.Http
     public class StandardHttpClient : IHttpClient
     {
         #region Fields
-        private HttpClient _client;
         private ILogger _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private HttpClient _client;
         #endregion
 
         #region Ctor
-        public StandardHttpClient(ILogger logger, IHttpContextAccessor httpContextAccessor)
+        public StandardHttpClient(ILogger logger,
+            IHttpContextAccessor httpContextAccessor)
         {
-            _client = new HttpClient();
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _client = new HttpClient();
         }
         #endregion
 
@@ -32,9 +33,7 @@ namespace microCommerce.Mvc.Http
         {
             var authorizationHeader = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
             if (!string.IsNullOrEmpty(authorizationHeader))
-            {
                 requestMessage.Headers.Add("Authorization", new List<string>() { authorizationHeader });
-            }
         }
 
         protected virtual async Task<HttpResponseMessage> DoPostPutAsync<T>(HttpMethod method,

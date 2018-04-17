@@ -22,7 +22,7 @@ namespace microCommerce.Domain.Globalization
         /// <summary>
         /// Gets or sets the custom formatting
         /// </summary>
-        public string CustomFormatting { get; set; }
+        public string DecimalFormat { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the entity is published

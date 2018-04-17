@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace microCommerce.Mvc.Themes
 {
@@ -25,9 +26,23 @@ namespace microCommerce.Mvc.Themes
         /// </summary>
         private const string ThemeInfoFileName = "theme.json";
 
+        private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim();
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Load theme info by unique theme name
+        /// </summary>
+        /// <param name="themeName">unique theme name</param>
+        /// <returns></returns>
+        public virtual ThemeInfo LoadThemeInfo(string themeName)
+        {
+            if (string.IsNullOrEmpty(themeName))
+                return null;
+
+            return LoadThemes().FirstOrDefault(t => t.ThemeName.Equals(themeName, StringComparison.InvariantCultureIgnoreCase));
+        }
+
         /// <summary>
         /// Load all themes
         /// </summary>
@@ -37,23 +52,26 @@ namespace microCommerce.Mvc.Themes
         {
             if (_themes == null)
             {
-                //load all theme descriptors
-                var themeFolder = new DirectoryInfo(CommonHelper.MapRootPath(ThemesPath));
-                _themes = new List<ThemeInfo>();
-                foreach (var themeInfoFile in themeFolder.GetFiles(ThemeInfoFileName, SearchOption.AllDirectories))
+                using (new WriteLockDisposable(Locker))
                 {
-                    var text = File.ReadAllText(themeInfoFile.FullName);
-                    if (string.IsNullOrEmpty(text))
-                        continue;
+                    //load all theme descriptors
+                    var themeFolder = new DirectoryInfo(CommonHelper.MapRootPath(ThemesPath));
+                    _themes = new List<ThemeInfo>();
+                    foreach (var themeInfoFile in themeFolder.GetFiles(ThemeInfoFileName, SearchOption.AllDirectories))
+                    {
+                        var text = File.ReadAllText(themeInfoFile.FullName);
+                        if (string.IsNullOrEmpty(text))
+                            continue;
 
-                    //deserialize module information file to ModuleInfo object
-                    var themeInfo = JsonConvert.DeserializeObject<ThemeInfo>(File.ReadAllText(themeInfoFile.FullName));
+                        //deserialize module information file to ModuleInfo object
+                        var themeInfo = JsonConvert.DeserializeObject<ThemeInfo>(File.ReadAllText(themeInfoFile.FullName));
 
-                    //validation
-                    if (string.IsNullOrEmpty(themeInfo?.Name))
-                        throw new Exception($"A theme info '{themeInfoFile.FullName}' has no system name");
+                        //validation
+                        if (string.IsNullOrEmpty(themeInfo?.ThemeName))
+                            throw new Exception($"A theme info '{themeInfoFile.FullName}' has no system name");
 
-                    _themes.Add(themeInfo);
+                        _themes.Add(themeInfo);
+                    }
                 }
             }
 
@@ -63,14 +81,14 @@ namespace microCommerce.Mvc.Themes
         /// <summary>
         /// Check whether the theme with specified name exists
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="themeName"></param>
         /// <returns></returns>
-        public virtual bool ThemeExists(string name)
+        public virtual bool ThemeExists(string themeName)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(themeName))
                 return false;
 
-            return LoadThemes().Any(t => t.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            return LoadThemes().Any(t => t.ThemeName.Equals(themeName, StringComparison.InvariantCultureIgnoreCase));
         }
         #endregion
     }

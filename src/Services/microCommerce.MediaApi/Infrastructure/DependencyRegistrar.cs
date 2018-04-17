@@ -51,7 +51,7 @@ namespace microCommerce.MediaApi.Infrastructure
                 {
                     builder.RegisterInstance(new MongoDbContext(serviceConfig.NoSqlConnectionString)).As<IMongoDbContext>().SingleInstance();
                     builder.RegisterGeneric(typeof(MongoRepository<>)).As(typeof(IMongoRepository<>)).InstancePerLifetimeScope();
-                    builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
+                    builder.RegisterType<MongoDbLogger>().As<ILogger>().InstancePerLifetimeScope();
                 }
                 builder.RegisterType<NullLogger>().As<ILogger>().InstancePerLifetimeScope();
             }

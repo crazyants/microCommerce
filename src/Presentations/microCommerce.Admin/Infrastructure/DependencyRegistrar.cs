@@ -3,9 +3,12 @@ using microCommerce.Caching;
 using microCommerce.Common;
 using microCommerce.Common.Configurations;
 using microCommerce.Ioc;
+using microCommerce.Localization;
 using microCommerce.Logging;
+using microCommerce.Module.Core;
 using microCommerce.MongoDb;
 using microCommerce.Mvc;
+using microCommerce.Mvc.Http;
 using microCommerce.Mvc.Infrastructure;
 using microCommerce.Redis;
 using Microsoft.Extensions.Configuration;
@@ -22,29 +25,51 @@ namespace microCommerce.Admin.Infrastructure
             //user agent helper
             builder.RegisterType<UserAgentHelper>().As<IUserAgentHelper>().InstancePerLifetimeScope();
 
-            //cache manager
-            builder.RegisterType<PerRequestCacheManager>().As<ICacheManager>().InstancePerLifetimeScope();
+            builder.RegisterType<LocalizationService>().As<ILocalizationService>().InstancePerLifetimeScope();
+            builder.RegisterInstance(new MongoDbContext(config.NoSqlConnectionString)).As<IMongoDbContext>().SingleInstance();
+            builder.RegisterGeneric(typeof(MongoRepository<>)).As(typeof(IMongoRepository<>)).InstancePerLifetimeScope();
 
-            //static cache manager
-            if (config.UseRedisCaching)
+            if (config.CachingEnabled)
             {
-                builder.RegisterInstance(new RedisConnectionWrapper(config.RedisConnectionString)).As<IRedisConnectionWrapper>().SingleInstance();
-                builder.RegisterType<RedisCacheManager>().As<IStaticCacheManager>().InstancePerLifetimeScope();
+                //cache manager
+                builder.RegisterType<PerRequestCacheManager>().As<ICacheManager>().InstancePerLifetimeScope();
+
+                //static cache manager
+                if (config.UseRedisCaching)
+                {
+                    builder.RegisterInstance(new RedisConnectionWrapper(config.RedisConnectionString)).As<IRedisConnectionWrapper>().SingleInstance();
+                    builder.RegisterType<RedisCacheManager>().As<IStaticCacheManager>().InstancePerLifetimeScope();
+                }
+                else
+                    builder.RegisterType<MemoryCacheManager>().As<IStaticCacheManager>().SingleInstance();
             }
             else
-                builder.RegisterType<MemoryCacheManager>().As<IStaticCacheManager>().SingleInstance();
+                builder.RegisterType<NullCacheManager>().As<ICacheManager>().InstancePerLifetimeScope();
 
             if (config.LoggingEnabled)
             {
                 if (config.UseNoSqlLogging)
                 {
-                    builder.RegisterInstance(new MongoDbContext(config.NoSqlConnectionString)).As<IMongoDbContext>().SingleInstance();
-                    builder.RegisterGeneric(typeof(MongoRepository<>)).As(typeof(IMongoRepository<>)).InstancePerLifetimeScope();
+                    builder.RegisterType<MongoDbLogger>().As<ILogger>().InstancePerLifetimeScope();
+                }
+                else
+                {
                     builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
                 }
             }
             else
+            {
                 builder.RegisterType<NullLogger>().As<ILogger>().InstancePerLifetimeScope();
+            }
+
+            //module features
+            builder.RegisterType<ModuleProvider>().As<IModuleProvider>().InstancePerLifetimeScope();
+            
+            //circuit breaker http client support
+            builder.RegisterType<StandardHttpClient>().As<IHttpClient>().InstancePerLifetimeScope();
+            
+            //work context
+            builder.RegisterType<WebWorkContext>().As<IWorkContext>().InstancePerLifetimeScope();
         }
 
         public int Priority => 1;

@@ -21,7 +21,7 @@ namespace microCommerce.GeoLocationApi.Infrastructure
                 {
                     builder.RegisterInstance(new MongoDbContext(config.NoSqlConnectionString)).As<IMongoDbContext>().SingleInstance();
                     builder.RegisterGeneric(typeof(MongoRepository<>)).As(typeof(IMongoRepository<>)).InstancePerLifetimeScope();
-                    builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
+                    builder.RegisterType<MongoDbLogger>().As<ILogger>().InstancePerLifetimeScope();
                 }
                 else
                     builder.RegisterType<NullLogger>().As<ILogger>().InstancePerLifetimeScope();

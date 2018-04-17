@@ -1,15 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\Presentations\microCommerce.Web\Modules\Payment.CreditCard</OutputPath>
+    <OutputPath>..\..\Presentations\microCommerce.Web\Modules\Payment.CreditCard\</OutputPath>
   </PropertyGroup>
-
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\Presentations\microCommerce.Web\Modules\Payment.CreditCard\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\microCommerce.Module.Core\microCommerce.Module.Core.csproj" />
+    <ProjectReference Include="..\..\Libraries\microCommerce.Module.Core\microCommerce.Module.Core.csproj">
+      <Private>false</Private>
+    </ProjectReference>
   </ItemGroup>
-
 </Project>

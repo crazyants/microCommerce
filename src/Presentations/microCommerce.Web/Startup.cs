@@ -1,4 +1,7 @@
-﻿using microCommerce.Mvc.Builders;
+﻿using microCommerce.Common;
+using microCommerce.Ioc;
+using microCommerce.Logging;
+using microCommerce.Mvc.Builders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

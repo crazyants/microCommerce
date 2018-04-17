@@ -1,18 +1,19 @@
+using microCommerce.Common;
 using System;
-using microCommerce.MongoDb;
+using System.IO;
 
 namespace microCommerce.Logging
 {
     public class DefaultLogger : ILogger
     {
         #region Fields
-        private readonly IMongoRepository<Log> _logRepository;
+
         #endregion
 
         #region Ctor
-        public DefaultLogger(IMongoRepository<Log> logRepository)
+        public DefaultLogger()
         {
-            _logRepository = logRepository;
+
         }
         #endregion
 
@@ -26,19 +27,20 @@ namespace microCommerce.Logging
         {
             if (string.IsNullOrEmpty(shortMessage))
                 return;
+            
+            string logMessage = string.Format("{0} - {1} - {2} - {3} - {4} - {5} - {6}",
+                DateTime.UtcNow.ToString("dd.MM.yyyy HH:mm:ss"),
+                logLevel.ToString(),
+                ipAddress,
+                shortMessage,
+                fullMessage,
+                pageUrl,
+                referrerUrl);
 
-            var log = new Log
+            using (StreamWriter sw = File.AppendText(CommonHelper.MapContentPath(string.Format("logs/{0:dd.MM.yyyy}.txt", DateTime.UtcNow))))
             {
-                LogLevel = logLevel.ToString(),
-                ShortMessage = shortMessage,
-                FullMessage = fullMessage,
-                PageUrl = pageUrl,
-                ReferrerUrl = referrerUrl,
-                IpAddress = ipAddress,
-                CreatedDateUtc = DateTime.UtcNow
-            };
-
-            _logRepository.Insert(log);
+                sw.WriteLine(logMessage);
+            }
         }
         #endregion
     }

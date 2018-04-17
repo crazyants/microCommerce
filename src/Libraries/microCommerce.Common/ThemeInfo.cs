@@ -5,7 +5,7 @@ namespace microCommerce.Common
         /// <summary>
         /// Gets or sets the theme system name
         /// </summary>
-        public string Name { get; set; }
+        public string ThemeName { get; set; }
 
         /// <summary>
         /// Gets or sets the theme friendly name

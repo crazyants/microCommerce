@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\Libraries\microCommerce.MongoDb\microCommerce.MongoDb.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="wwwroot\logs\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 </Project>
