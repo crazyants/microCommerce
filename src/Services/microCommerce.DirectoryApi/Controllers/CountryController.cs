@@ -8,7 +8,6 @@ using System.Linq;
 
 namespace microCommerce.DirectoryApi.Controllers
 {
-    [Route("/countries")]
     public class CountryController : ServiceBaseController
     {
         #region Constants
@@ -32,8 +31,7 @@ namespace microCommerce.DirectoryApi.Controllers
         #endregion
 
         #region Methods
-        [HttpGet]
-        [Route("/countries")]
+        [HttpGet("/countries")]
         public virtual IActionResult Countries()
         {
             var countries = _cacheManager.Get(COUNTRIES_ALL_CACHE_KEY, () =>
@@ -46,9 +44,8 @@ namespace microCommerce.DirectoryApi.Controllers
 
             return Json(countries);
         }
-
-        [HttpGet]
-        [Route("/countries/{Id:int}")]
+        
+        [HttpGet("/countries/{Id:int}")]
         public virtual IActionResult CountryById(int Id)
         {
             if (Id == 0)
@@ -58,9 +55,8 @@ namespace microCommerce.DirectoryApi.Controllers
 
             return Json(country);
         }
-
-        [HttpGet]
-        [Route("/countries/{twoLetterIsoCode}")]
+        
+        [HttpGet("/countries/{twoLetterIsoCode}")]
         public virtual IActionResult CountryByTwoLetterIsoCode(string twoLetterIsoCode)
         {
             if (string.IsNullOrEmpty(twoLetterIsoCode))

@@ -25,7 +25,7 @@
         /// <summary>
         /// Gets or sets the attribute control type identifier
         /// </summary>
-        public int ProductAttributeControlTypeId { get; set; }
+        public int AttributeControlTypeId { get; set; }
 
         /// <summary>
         /// Gets or sets the display order
@@ -48,8 +48,8 @@
         [ColumnIgnore]
         public ProductAttributeControlType AttributeControlType
         {
-            get { return (ProductAttributeControlType)ProductAttributeControlTypeId; }
-            set { ProductAttributeControlTypeId = (int)value; }
+            get { return (ProductAttributeControlType)AttributeControlTypeId; }
+            set { AttributeControlTypeId = (int)value; }
         }
     }
 }

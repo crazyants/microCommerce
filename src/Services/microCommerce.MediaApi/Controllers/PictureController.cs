@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace microCommerce.MediaApi.Controllers
 {
-    [Route("/pictures")]
     public class PictureController : ServiceBaseController
     {
         #region Fields
@@ -23,15 +22,13 @@ namespace microCommerce.MediaApi.Controllers
         #endregion
 
         #region Methods
-        [HttpGet]
-        [Route("/pictures/{Id:int}")]
+        [HttpGet("/pictures/{Id:int}")]
         public virtual IActionResult GetPictureById(int Id)
         {
             return Json(_pictureService.GetPictureById(Id));
         }
-
-        [HttpGet]
-        [Route("/pictures")]
+        
+        [HttpGet("/pictures")]
         public virtual IActionResult GetPictures()
         {
             var pictures = _pictureService.GetPictures();
@@ -43,9 +40,8 @@ namespace microCommerce.MediaApi.Controllers
                 pictureUrl = _pictureService.GetPictureUrl(x)
             }));
         }
-
-        [HttpPost]
-        [Route("/pictures/upload")]
+        
+        [HttpPost("/pictures/upload")]
         public virtual async Task<IActionResult> Upload()
         {
             if (Request.Form == null || !Request.Form.Files.Any())

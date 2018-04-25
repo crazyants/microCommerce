@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace microCommerce.GeoLocationApi.Controllers
 {
-    [Route("/geolocation")]
     public class GeoLocationController : ServiceBaseController
     {
         #region Fields
@@ -20,8 +19,7 @@ namespace microCommerce.GeoLocationApi.Controllers
         #endregion
 
         #region Methods
-        [HttpGet]
-        [Route("/geolocation")]
+        [HttpGet("/geolocation")]
         public virtual async Task<IActionResult> FindGeoLocation(string ipAddress)
         {
             return Json(new

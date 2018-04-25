@@ -6,6 +6,7 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\microCommerce.Dapper\microCommerce.Dapper.csproj" />
     <ProjectReference Include="..\..\Libraries\microCommerce.Mvc\microCommerce.Mvc.csproj" />
   </ItemGroup>
 </Project>
