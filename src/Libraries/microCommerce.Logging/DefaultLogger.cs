@@ -28,14 +28,10 @@ namespace microCommerce.Logging
             if (string.IsNullOrEmpty(shortMessage))
                 return;
             
-            string logMessage = string.Format("{0} - {1} - {2} - {3} - {4} - {5} - {6}",
-                DateTime.UtcNow.ToString("dd.MM.yyyy HH:mm:ss"),
+            string logMessage = string.Format("{0} [{1}] {2}",
+                DateTime.UtcNow.ToString("dd.MM.yyyy HH:mm:ss.fff zzz"),
                 logLevel.ToString(),
-                ipAddress,
-                shortMessage,
-                fullMessage,
-                pageUrl,
-                referrerUrl);
+                fullMessage);
 
             using (StreamWriter sw = File.AppendText(CommonHelper.MapContentPath(string.Format("logs/{0:dd.MM.yyyy}.txt", DateTime.UtcNow))))
             {

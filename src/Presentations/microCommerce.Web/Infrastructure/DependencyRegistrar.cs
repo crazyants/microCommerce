@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using microCommerce.Caching;
 using microCommerce.Common;
-using microCommerce.Common.Configurations;
 using microCommerce.Ioc;
 using microCommerce.Localization;
 using microCommerce.Logging;
@@ -13,14 +12,16 @@ using microCommerce.Mvc.Infrastructure;
 using microCommerce.Mvc.Themes;
 using microCommerce.Redis;
 using microCommerce.Setting;
-using Microsoft.Extensions.Configuration;
 
 namespace microCommerce.Web.Infrastructure
 {
     public class DependencyRegistrar : IDependencyRegistrar
     {
-        public void Register(ContainerBuilder builder, IAssemblyHelper assemblyHelper, IConfigurationRoot configuration, IAppConfiguration config)
+        public void Register(DependencyContext context)
         {
+            var builder = context.ContainerBuilder;
+            var config = context.AppConfig;
+
             //web helper
             builder.RegisterType<WebHelper>().As<IWebHelper>().InstancePerLifetimeScope();
 

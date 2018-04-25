@@ -17,7 +17,7 @@ namespace microCommerce.Mvc
     public class WebHelper : IWebHelper
     {
         #region Const
-        private const string NullIpAddress = "::1";
+        private const string nullIpAddress = "::1";
         #endregion
 
         #region Fields 
@@ -33,8 +33,8 @@ namespace microCommerce.Mvc
         /// <param name="httpContextAccessor">HTTP context accessor</param>
         public WebHelper(HostingConfiguration hostingConfig, IHttpContextAccessor httpContextAccessor)
         {
-            this._hostingConfig = hostingConfig;
-            this._httpContextAccessor = httpContextAccessor;
+            _hostingConfig = hostingConfig;
+            _httpContextAccessor = httpContextAccessor;
         }
         #endregion
 
@@ -68,7 +68,7 @@ namespace microCommerce.Mvc
         /// <returns>Result</returns>
         protected virtual bool IsIpAddressSet(IPAddress address)
         {
-            return address != null && address.ToString() != NullIpAddress;
+            return address != null && address.ToString() != nullIpAddress;
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace microCommerce.Mvc
                 return string.Empty;
 
             if (!useSsl.HasValue)
-                useSsl = IsCurrentConnectionSecured();
+                useSsl = ConnectionIsSecure();
 
             //get the host considering using SSL
             var url = GetCurrentHost(useSsl.Value).TrimEnd('/');
@@ -185,7 +185,7 @@ namespace microCommerce.Mvc
         /// Gets a value indicating whether current connection is secured
         /// </summary>
         /// <returns>True if it's secured, otherwise false</returns>
-        public virtual bool IsCurrentConnectionSecured()
+        public virtual bool ConnectionIsSecure()
         {
             if (!IsRequestAvailable())
                 return false;
@@ -240,7 +240,7 @@ namespace microCommerce.Mvc
         {
             //whether connection is secured
             if (!useSsl.HasValue)
-                useSsl = IsCurrentConnectionSecured();
+                useSsl = ConnectionIsSecure();
 
             //get store host
             var host = GetCurrentHost(useSsl.Value).TrimEnd('/');

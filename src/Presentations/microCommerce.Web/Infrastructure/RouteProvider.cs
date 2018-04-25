@@ -21,7 +21,7 @@ namespace microCommerce.Web.Infrastructure
 
             routeBuilder.MapRoute(
                 name: "HomePage",
-                template: "{controller=Home}/{action=Index}");
+                template: "");
         }
 
         public int Priority

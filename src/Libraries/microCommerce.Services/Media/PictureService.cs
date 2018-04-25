@@ -3,56 +3,66 @@ using microCommerce.Caching;
 using microCommerce.Common;
 using microCommerce.Dapper;
 using microCommerce.Domain.Media;
-using microCommerce.Logging;
+using microCommerce.Setting;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading;
 
-namespace microCommerce.MediaApi.Services
+namespace microCommerce.Services.Media
 {
     public class PictureService : IPictureService
     {
-        #region Contants
+        #region Constants
+        private const string ThumbFolderPath = "~/content/images/thumbs";
+        private const string ThumbFolder = "content/images/thumbs";
+
+        private const string PictureFolderPath = "~/content/images";
+        private const string PictureFolder = "content/images";
+
+        private const string PictureFileNameFormat = "{0:0000000}_0{1}";
+        private const string DefaultPictureFileName = "default-image.jpg";
+
         private const string PICTURE_FIND_BY_ID_KEY = "PICTURE_FINDBYID_KEY_{0}";
         #endregion
 
         #region Fields
-        private readonly ICacheManager _cacheManager;
         private readonly IDataContext _dataContext;
         private readonly IWebHelper _webHelper;
-        private readonly ILogger _logger;
+        private readonly ICacheManager _cacheManager;
+
+        private readonly MediaSettings _mediaSettings;
         #endregion
 
         #region Ctor
-        public PictureService(ICacheManager cacheManager,
-            IDataContext dataContext,
+        public PictureService(IDataContext dataContext,
             IWebHelper webHelper,
-            ILogger logger)
+            ICacheManager cacheManager,
+            MediaSettings mediaSettings)
         {
-            _cacheManager = cacheManager;
             _dataContext = dataContext;
             _webHelper = webHelper;
-            _logger = logger;
+            _cacheManager = cacheManager;
+
+            _mediaSettings = mediaSettings;
         }
         #endregion
 
         #region Utilities
         /// <summary>
-        /// Loads a picture from file
+        /// Gets the loaded picture binary
         /// </summary>
-        /// <param name="pictureId">Picture identifier</param>
-        /// <param name="mimeType">MIME type</param>
-        /// <returns>Picture binary</returns>
+        /// <param name="pictureId"></param>
+        /// <param name="mimeType"></param>
+        /// <returns></returns>
         protected virtual byte[] LoadPictureFromFile(int pictureId, string mimeType)
         {
-            string lastPart = GetFileExtensionFromMimeType(mimeType);
-            string fileName = string.Format("{0}_0.{1}", pictureId.ToString("0000000"), lastPart);
+            string fileName = string.Format(PictureFileNameFormat, pictureId, MimeTypeMap.GetExtension(mimeType));
             var filePath = GetPictureLocalPath(fileName);
-
             if (!File.Exists(filePath))
                 return new byte[0];
 
@@ -60,32 +70,37 @@ namespace microCommerce.MediaApi.Services
         }
 
         /// <summary>
-        /// Returns the file extension from mime type.
+        /// Save picture binary to file system
         /// </summary>
-        /// <param name="mimeType">Mime type</param>
-        /// <returns>File extension</returns>
-        protected virtual string GetFileExtensionFromMimeType(string mimeType)
+        /// <param name="pictureId"></param>
+        /// <param name="pictureBinary"></param>
+        /// <param name="mimeType"></param>
+        protected virtual void SavePictureToFile(int pictureId, byte[] pictureBinary, string mimeType)
         {
-            if (mimeType == null)
-                return null;
+            //ensure content/images directory exists
+            var picturesDirectoryPath = CommonHelper.MapContentPath(PictureFolderPath);
+            if (!Directory.Exists(picturesDirectoryPath))
+                Directory.CreateDirectory(picturesDirectoryPath);
 
-            //also see System.Web.MimeMapping for more mime types
-            string[] parts = mimeType.Split('/');
-            string lastPart = parts[parts.Length - 1];
-            switch (lastPart)
-            {
-                case "pjpeg":
-                    lastPart = "jpg";
-                    break;
-                case "x-png":
-                    lastPart = "png";
-                    break;
-                case "x-icon":
-                    lastPart = "ico";
-                    break;
-            }
+            string fileName = string.Format(PictureFileNameFormat, pictureId, MimeTypeMap.GetExtension(mimeType));
+            var filePath = GetPictureLocalPath(fileName);
 
-            return lastPart;
+            File.WriteAllBytes(filePath, pictureBinary);
+        }
+
+        /// <summary>
+        /// Save picture thumbs to file system
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="pictureBinary"></param>
+        protected virtual void SaveThumbToFile(string filePath, byte[] pictureBinary)
+        {
+            //ensure content/images/thumbs directory exists
+            var thumbsDirectoryPath = CommonHelper.MapContentPath(ThumbFolderPath);
+            if (!Directory.Exists(thumbsDirectoryPath))
+                Directory.CreateDirectory(thumbsDirectoryPath);
+
+            File.WriteAllBytes(filePath, pictureBinary);
         }
 
         /// <summary>
@@ -94,6 +109,9 @@ namespace microCommerce.MediaApi.Services
         /// <param name="picture">Picture</param>
         protected virtual void DeletePictureThumbs(Picture picture)
         {
+            if (picture == null)
+                throw new ArgumentNullException(nameof(picture));
+
             string filter = string.Format("{0}*.*", picture.Id.ToString("0000000"));
             var thumbDirectoryPath = CommonHelper.MapContentPath("~/content/images/thumbs");
             string[] currentFiles = Directory.GetFiles(thumbDirectoryPath, filter, SearchOption.AllDirectories);
@@ -105,26 +123,38 @@ namespace microCommerce.MediaApi.Services
         }
 
         /// <summary>
-        /// Get picture (thumb) local path
+        /// Delete picture on file system
         /// </summary>
-        /// <param name="thumbFileName">Filename</param>
-        /// <returns>Local picture thumb path</returns>
-        protected virtual string GetThumbLocalPath(string thumbFileName)
+        /// <param name="picture"></param>
+        protected virtual void DeletePictureOnFile(Picture picture)
         {
-            var thumbsDirectoryPath = CommonHelper.MapContentPath("~/content/images/thumbs");
-            var thumbFilePath = Path.Combine(thumbsDirectoryPath, thumbFileName);
+            if (picture == null)
+                throw new ArgumentNullException(nameof(picture));
 
-            return thumbFilePath;
+            string fileName = string.Format(PictureFileNameFormat, picture.Id, MimeTypeMap.GetExtension(picture.MimeType));
+            var filePath = GetPictureLocalPath(fileName);
+            if (File.Exists(filePath))
+                File.Delete(filePath);
         }
 
         /// <summary>
-        /// Get picture local path. Used when images stored on file system (not in the database)
+        /// Get picture local path
         /// </summary>
-        /// <param name="fileName">Filename</param>
-        /// <returns>Local picture path</returns>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         protected virtual string GetPictureLocalPath(string fileName)
         {
-            return Path.Combine(CommonHelper.MapContentPath("~/content/images/"), fileName);
+            return Path.Combine(CommonHelper.MapContentPath(PictureFolderPath), fileName);
+        }
+
+        /// <summary>
+        /// Get picture (thumb) local path
+        /// </summary>
+        /// <param name="fileName">Filename</param>
+        /// <returns>Local picture thumb path</returns>
+        protected virtual string GetThumbLocalPath(string fileName)
+        {
+            return Path.Combine(CommonHelper.MapContentPath(ThumbFolderPath), fileName);
         }
 
         /// <summary>
@@ -138,7 +168,8 @@ namespace microCommerce.MediaApi.Services
         protected virtual Size CalculateDimensions(Size originalSize, int targetSize,
             ResizeType resizeType = ResizeType.LongestSide, bool ensureSizePositive = true)
         {
-            float width, height;
+            float width = 0;
+            float height = 0;
 
             switch (resizeType)
             {
@@ -176,127 +207,115 @@ namespace microCommerce.MediaApi.Services
                     height = 1;
             }
 
-            //we invoke Math.Round to ensure that no white background is rendered
             return new Size((int)Math.Round(width), (int)Math.Round(height));
         }
 
         /// <summary>
-        /// Save picture on file system
+        /// Validates input picture dimensions
         /// </summary>
-        /// <param name="pictureId">Picture identifier</param>
         /// <param name="pictureBinary">Picture binary</param>
         /// <param name="mimeType">MIME type</param>
-        protected virtual void SavePictureInFile(int pictureId, byte[] pictureBinary, string mimeType)
+        /// <returns>Picture binary or throws an exception</returns>
+        protected virtual byte[] ValidatePicture(byte[] pictureBinary, string mimeType)
         {
-            string lastPart = GetFileExtensionFromMimeType(mimeType);
-            string fileName = string.Format("{0}_0.{1}", pictureId.ToString("0000000"), lastPart);
-            string filePath = GetPictureLocalPath(fileName);
-            File.WriteAllBytes(filePath, pictureBinary);
+            using (Image<Rgba32> b = Image.Load(pictureBinary))
+            {
+                using (var destStream = new MemoryStream())
+                {
+                    var options = new ResizeOptions
+                    {
+                        Size = new SixLabors.Primitives.Size(_mediaSettings.MaximumPictureSize, _mediaSettings.MaximumPictureSize),
+                        Mode = ResizeMode.Max
+                    };
+                    b.Mutate(x => x.Resize(options));
+
+                    if (ImageFormats.Jpeg.MimeTypes.Contains(mimeType))
+                    {
+                        b.Save(destStream, ImageFormats.Jpeg);
+                    }
+                    else if (ImageFormats.Png.MimeTypes.Contains(mimeType))
+                    {
+                        b.Save(destStream, ImageFormats.Png);
+                    }
+                    else if (ImageFormats.Gif.MimeTypes.Contains(mimeType))
+                    {
+                        b.Save(destStream, ImageFormats.Gif);
+                    }
+                    else if (ImageFormats.Bmp.MimeTypes.Contains(mimeType))
+                    {
+                        b.Save(destStream, ImageFormats.Bmp);
+                    }
+
+                    return destStream.ToArray();
+                }
+            }
         }
+        #endregion
 
-        /// <summary>
-        /// Delete a picture on file system
-        /// </summary>
-        /// <param name="picture">Picture</param>
-        protected virtual void DeletePictureOnFileSystem(Picture picture)
-        {
-            if (picture == null)
-                throw new ArgumentNullException("picture");
-
-            string lastPart = GetFileExtensionFromMimeType(picture.MimeType);
-            string fileName = string.Format("{0}_0.{1}", picture.Id.ToString("0000000"), lastPart);
-            string filePath = GetPictureLocalPath(fileName);
-
-            if (File.Exists(filePath))
-                File.Delete(filePath);
-        }
-
-        /// <summary>
-        /// Save a value indicating whether some file (thumb) already exists
-        /// </summary>
-        /// <param name="thumbFilePath">Thumb file path</param>
-        /// <param name="thumbFileName">Thumb file name</param>
-        /// <param name="mimeType">MIME type</param>
-        /// <param name="binary">Picture binary</param>
-        protected virtual void SaveThumb(string thumbFilePath, string thumbFileName, string mimeType, byte[] binary)
-        {
-            File.WriteAllBytes(thumbFilePath, binary);
-        }
-
-        /// <summary>
-        /// Get picture (thumb) URL
-        /// </summary>
-        /// <param name="thumbFileName">Filename</param>
-        /// <returns>Local picture thumb path</returns>
-        protected virtual string GetThumbUrl(string thumbFileName)
-        {
-            return "content/images/thumbs/" + thumbFileName;
-        }
-
-
+        #region Get Picture Urls
         /// <summary>
         /// Gets the default picture URL
         /// </summary>
         /// <param name="targetSize">The target picture size (longest side)</param>
+        /// <param name="defaultPictureType">Default picture type</param>
         /// <returns>Picture URL</returns>
         public virtual string GetDefaultPictureUrl(int targetSize = 0)
         {
-            string defaultImageFileName = "default-image.png";
-            string filePath = GetPictureLocalPath(defaultImageFileName);
-
+            string filePath = GetPictureLocalPath(DefaultPictureFileName);
             if (!File.Exists(filePath))
                 return string.Empty;
 
             if (targetSize == 0)
             {
-                return _webHelper.GetCurrentLocation() + "content/images/" + defaultImageFileName;
+                return string.Format("{0}{1}/{2}",
+                    _webHelper.GetCurrentLocation(),
+                    PictureFolder,
+                    DefaultPictureFileName);
             }
-            else
-            {
-                string fileExtension = Path.GetExtension(filePath);
-                string thumbFileName = string.Format("{0}_{1}{2}",
-                    Path.GetFileNameWithoutExtension(filePath),
-                    targetSize,
-                    fileExtension);
 
-                var thumbFilePath = GetThumbLocalPath(thumbFileName);
+            string fileExtension = Path.GetExtension(filePath);
+            string thumbFileName = string.Format("{0}_{1}{2}", Path.GetFileNameWithoutExtension(filePath), targetSize, fileExtension);
+            string thumbFilePath = GetThumbLocalPath(thumbFileName);
+
+            //the named mutex helps to avoid creating the same files in different threads,
+            //and does not decrease performance significantly, because the code is blocked only for the specific file.
+            using (var mutex = new Mutex(false, thumbFileName))
+            {
                 if (!File.Exists(thumbFilePath))
                 {
-                    using (var b = new Bitmap(filePath))
-                    {
-                        using (var destStream = new MemoryStream())
-                        {
-                            var newSize = CalculateDimensions(b.Size, targetSize);
-                            Image destinationImage = new Bitmap(newSize.Width, newSize.Height);
-                            Graphics g = Graphics.FromImage(destinationImage);
-                            g.DrawImage(b,
-                                new Rectangle(0, 0, newSize.Width, newSize.Height),
-                                0,
-                                0,
-                                newSize.Width,
-                                newSize.Height,
-                                GraphicsUnit.Pixel);
-                            destinationImage.Save(destStream, ImageFormat.Jpeg);
+                    mutex.WaitOne();
 
-                            var destBinary = destStream.ToArray();
-                            SaveThumb(thumbFilePath, thumbFileName, "", destBinary);
+                    //check, if the file was created, while we were waiting for the release of the mutex.
+                    if (!File.Exists(thumbFilePath))
+                    {
+                        using (Image<Rgba32> b = Image.Load(filePath))
+                        {
+                            using (var ms = new MemoryStream())
+                            {
+                                var newSize = CalculateDimensions(new Size(b.Width, b.Height), targetSize);
+                                var options = new ResizeOptions
+                                {
+                                    Size = new SixLabors.Primitives.Size(newSize.Width, newSize.Height),
+                                    Mode = ResizeMode.Pad
+                                };
+
+                                b.Mutate(x => x.Resize(options));
+                                b.Save(ms, ImageFormats.Jpeg);
+
+                                //save to file
+                                SaveThumbToFile(thumbFilePath, ms.ToArray());
+                            }
                         }
                     }
+
+                    mutex.ReleaseMutex();
                 }
-
-                return _webHelper.GetCurrentLocation() + GetThumbUrl(thumbFileName);
             }
-        }
-        #endregion
 
-        /// <summary>
-        /// Gets the loaded picture binary depending on picture storage settings
-        /// </summary>
-        /// <param name="picture">Picture</param>
-        /// <returns>Picture binary</returns>
-        public virtual byte[] LoadPictureBinary(Picture picture)
-        {
-            return LoadPictureFromFile(picture.Id, picture.MimeType);
+            return string.Format("{0}{1}/{2}",
+                    _webHelper.GetCurrentLocation(),
+                    ThumbFolder,
+                    thumbFileName);
         }
 
         /// <summary>
@@ -325,10 +344,9 @@ namespace microCommerce.MediaApi.Services
             int targetSize = 0,
             bool showDefaultPicture = true)
         {
-            string url = string.Empty;
             byte[] pictureBinary = null;
             if (picture != null)
-                pictureBinary = LoadPictureBinary(picture);
+                pictureBinary = LoadPictureFromFile(picture.Id, picture.MimeType);
 
             if (picture == null || pictureBinary == null || pictureBinary.Length == 0)
             {
@@ -336,24 +354,30 @@ namespace microCommerce.MediaApi.Services
                     return GetDefaultPictureUrl(targetSize);
             }
 
-            var seoFileName = picture.SeoFilename;
-            string lastPart = GetFileExtensionFromMimeType(picture.MimeType);
+            string seoFileName = picture.SeoFilename;
+            string lastPart = MimeTypeMap.GetExtension(picture.MimeType);
             string thumbFileName;
             if (targetSize == 0)
             {
-                thumbFileName = !string.IsNullOrEmpty(seoFileName)
-                    ? string.Format("{0}_{1}.{2}", picture.Id.ToString("0000000"), seoFileName, lastPart)
-                    : string.Format("{0}.{1}", picture.Id.ToString("0000000"), lastPart);
+                if (string.IsNullOrEmpty(seoFileName))
+                    thumbFileName = string.Format("{0:0000000}{1}", picture.Id, lastPart);
+                else
+                    thumbFileName = string.Format("{0:0000000}_{1}{2}", picture.Id, seoFileName, lastPart);
             }
             else
             {
-                thumbFileName = !string.IsNullOrEmpty(seoFileName)
-                    ? string.Format("{0}_{1}_{2}.{3}", picture.Id.ToString("0000000"), seoFileName, targetSize, lastPart)
-                    : string.Format("{0}_{1}.{2}", picture.Id.ToString("0000000"), targetSize, lastPart);
+
+                if (string.IsNullOrEmpty(seoFileName))
+                    thumbFileName = string.Format("{0:0000000}_{1}{2}", picture.Id, targetSize, lastPart);
+                else
+                    thumbFileName = string.Format("{0:0000000}_{1}_{2}{3}", picture.Id, seoFileName, targetSize, lastPart);
+
+                thumbFileName = !String.IsNullOrEmpty(seoFileName)
+                    ? $"{picture.Id.ToString("0000000")}_{seoFileName}_{targetSize}.{lastPart}"
+                    : $"{picture.Id.ToString("0000000")}_{targetSize}.{lastPart}";
             }
 
             string thumbFilePath = GetThumbLocalPath(thumbFileName);
-
             //the named mutex helps to avoid creating the same files in different threads,
             //and does not decrease performance significantly, because the code is blocked only for the specific file.
             using (var mutex = new Mutex(false, thumbFileName))
@@ -366,82 +390,46 @@ namespace microCommerce.MediaApi.Services
                     if (!File.Exists(thumbFilePath))
                     {
                         byte[] pictureBinaryResized;
-
-                        //resizing required
-                        if (targetSize != 0)
+                        if (targetSize == 0)
                         {
-                            using (var stream = new MemoryStream(pictureBinary))
-                            {
-                                Bitmap b = null;
-                                try
-                                {
-                                    //try-catch to ensure that picture binary is really OK.
-                                    //Otherwise, we can get "Parameter is not valid" exception if binary is corrupted for some reasons
-                                    b = new Bitmap(stream);
-                                }
-                                catch (ArgumentException exc)
-                                {
-                                    _logger.Error(string.Format("Error generating picture thumb. ID={0}", picture.Id), exc);
-                                }
-
-                                //bitmap could not be loaded for some reasons
-                                if (b == null)
-                                    return url;
-
-                                using (var destStream = new MemoryStream())
-                                {
-                                    var newSize = CalculateDimensions(b.Size, targetSize);
-                                    Image destinationImage = new Bitmap(newSize.Width, newSize.Height);
-                                    Graphics g = Graphics.FromImage(destinationImage);
-                                    g.DrawImage(b,
-                                        new Rectangle(0, 0, newSize.Width, newSize.Height),
-                                        0,
-                                        0,
-                                        newSize.Width,
-                                        newSize.Height,
-                                        GraphicsUnit.Pixel);
-
-                                    destinationImage.Save(destStream, ImageFormat.Jpeg);
-
-                                    pictureBinaryResized = destStream.ToArray();
-                                    b.Dispose();
-                                }
-                            }
+                            pictureBinaryResized = pictureBinary;
                         }
                         else
                         {
-                            //create a copy of pictureBinary
-                            pictureBinaryResized = pictureBinary.ToArray();
+                            using (Image<Rgba32> b = Image.Load(pictureBinary))
+                            {
+                                using (var ms = new MemoryStream())
+                                {
+                                    var newSize = CalculateDimensions(new Size(b.Width, b.Height), targetSize);
+                                    var options = new ResizeOptions
+                                    {
+                                        Size = new SixLabors.Primitives.Size(newSize.Width, newSize.Height),
+                                        Mode = ResizeMode.Pad
+                                    };
+
+                                    b.Mutate(x => x.Resize(options));
+                                    b.Save(ms, ImageFormats.Jpeg);
+                                    pictureBinaryResized = ms.ToArray();
+                                }
+                            }
                         }
 
-                        SaveThumb(thumbFilePath, thumbFileName, picture.MimeType, pictureBinaryResized);
+                        //save to file
+                        SaveThumbToFile(thumbFilePath, pictureBinaryResized);
                     }
 
                     mutex.ReleaseMutex();
                 }
             }
-            url = _webHelper.GetCurrentLocation() + GetThumbUrl(thumbFileName);
 
-            return url;
+            return string.Format("{0}{1}/{2}",
+                    _webHelper.GetCurrentLocation(),
+                    ThumbFolder,
+                    thumbFileName);
         }
+        #endregion
 
-        /// <summary>
-        /// Get a picture local path
-        /// </summary>
-        /// <param name="picture">Picture instance</param>
-        /// <param name="targetSize">The target picture size (longest side)</param>
-        /// <param name="showDefaultPicture">A value indicating whether the default picture is shown</param>
-        /// <returns></returns>
-        public virtual string GetThumbLocalPath(Picture picture,
-            int targetSize = 0,
-            bool showDefaultPicture = true)
-        {
-            string url = GetPictureUrl(picture, targetSize, showDefaultPicture);
-            if (String.IsNullOrEmpty(url))
-                return String.Empty;
-
-            return GetThumbLocalPath(Path.GetFileName(url));
-        }
+        #region Picture Crud Operations
 
         /// <summary>
         /// Gets a picture
@@ -516,7 +504,7 @@ namespace microCommerce.MediaApi.Services
             _dataContext.Insert(picture);
 
             //save to file
-            SavePictureInFile(picture.Id, pictureBinary, mimeType);
+            SavePictureToFile(picture.Id, pictureBinary, mimeType);
 
             return picture;
         }
@@ -565,7 +553,7 @@ namespace microCommerce.MediaApi.Services
             _dataContext.Update(picture);
 
             //save to file
-            SavePictureInFile(picture.Id, pictureBinary, mimeType);
+            SavePictureToFile(picture.Id, pictureBinary, mimeType);
 
             return picture;
         }
@@ -583,60 +571,11 @@ namespace microCommerce.MediaApi.Services
             DeletePictureThumbs(picture);
 
             //delete from file
-            DeletePictureOnFileSystem(picture);
+            DeletePictureOnFile(picture);
 
             //delete from database
             _dataContext.Delete(picture);
         }
-
-        /// <summary>
-        /// Updates a SEO filename of a picture
-        /// </summary>
-        /// <param name="pictureId">The picture identifier</param>
-        /// <param name="seoFilename">The SEO filename</param>
-        /// <returns>Picture</returns>
-        public virtual Picture SetSeoFilename(int pictureId, string seoFilename)
-        {
-            var picture = GetPictureById(pictureId);
-            if (picture == null)
-                throw new ArgumentException("No picture found with the specified id");
-
-            //update if it has been changed
-            if (seoFilename != picture.SeoFilename)
-            {
-                //update picture
-                picture = UpdatePicture(picture.Id,
-                    LoadPictureBinary(picture),
-                    picture.MimeType,
-                    seoFilename,
-                    picture.AltAttribute,
-                    picture.TitleAttribute,
-                    false);
-            }
-
-            return picture;
-        }
-
-        /// <summary>
-        /// Validates input picture dimensions
-        /// </summary>
-        /// <param name="pictureBinary">Picture binary</param>
-        /// <param name="mimeType">MIME type</param>
-        /// <returns>Picture binary or throws an exception</returns>
-        public virtual byte[] ValidatePicture(byte[] pictureBinary, string mimeType)
-        {
-            //using (var destStream = new MemoryStream())
-            //{
-            //    ImageBuilder.Current.Build(pictureBinary, destStream, new ResizeSettings
-            //    {
-            //        MaxWidth = _mediaSettings.MaximumImageSize,
-            //        MaxHeight = _mediaSettings.MaximumImageSize,
-            //        Quality = _mediaSettings.DefaultImageQuality
-            //    });
-            //    return destStream.ToArray();
-            //}
-
-            return pictureBinary;
-        }
+        #endregion
     }
 }

@@ -42,19 +42,10 @@ namespace microCommerce.Module.Core
         #region Utilities
         private static Assembly DeployModule(ApplicationPartManager applicationPartManager, FileInfo moduleFile)
         {
-            Assembly assembly = null;
-            try
-            {
-                assembly = Assembly.LoadFrom(moduleFile.FullName);
-            }
-            catch (FileLoadException) { throw; }
-
-            if (assembly != null)
-            {
-                var assemblyPart = new AssemblyPart(assembly);
-                if (!applicationPartManager.ApplicationParts.Contains(assemblyPart))
-                    applicationPartManager.ApplicationParts.Add(assemblyPart);
-            }
+            Assembly assembly = Assembly.LoadFile(moduleFile.FullName);
+            var assemblyPart = new AssemblyPart(assembly);
+            if (!applicationPartManager.ApplicationParts.Contains(assemblyPart))
+                applicationPartManager.ApplicationParts.Add(assemblyPart);
 
             return assembly;
         }

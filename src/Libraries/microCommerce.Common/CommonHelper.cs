@@ -274,7 +274,7 @@ namespace microCommerce.Common
         /// <returns>The physical path. E.g. "c:\inetpub\wwwroot\bin"</returns>
         public static string MapRootPath(string path)
         {
-            path = path.Replace("~/", "").TrimStart('/').Replace('/', '\\');
+            path = path.Replace("~/", "").TrimStart('/');
             return Path.Combine(GlobalConfiguration.ApplicationRootPath, path);
         }
 

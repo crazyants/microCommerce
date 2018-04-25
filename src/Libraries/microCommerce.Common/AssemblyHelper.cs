@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace microCommerce.Common
 {
-    public class AssemblyFinder : IAssemblyHelper
+    public class AssemblyHelper : IAssemblyHelper
     {
         /// <summary>
         /// Find classes of type

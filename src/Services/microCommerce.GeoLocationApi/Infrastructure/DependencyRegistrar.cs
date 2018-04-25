@@ -1,18 +1,18 @@
 ﻿using Autofac;
-using microCommerce.Common;
-using microCommerce.Common.Configurations;
 using microCommerce.GeoLocationApi.Services;
 using microCommerce.Ioc;
 using microCommerce.Logging;
 using microCommerce.MongoDb;
-using Microsoft.Extensions.Configuration;
 
 namespace microCommerce.GeoLocationApi.Infrastructure
 {
     public class DependencyRegistrar : IDependencyRegistrar
     {
-        public void Register(ContainerBuilder builder, IAssemblyHelper assemblyHelper, IConfigurationRoot configuration, IAppConfiguration config)
+        public void Register(DependencyContext context)
         {
+            var builder = context.ContainerBuilder;
+            var config = context.AppConfig;
+
             //register logging
             if (config.LoggingEnabled)
             {

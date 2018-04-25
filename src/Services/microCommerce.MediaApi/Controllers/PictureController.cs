@@ -1,6 +1,6 @@
 ﻿using microCommerce.Common;
-using microCommerce.MediaApi.Services;
 using microCommerce.Mvc.Controllers;
+using microCommerce.Services.Media;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;

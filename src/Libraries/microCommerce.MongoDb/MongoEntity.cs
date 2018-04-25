@@ -8,7 +8,7 @@ namespace microCommerce.MongoDb
 {
     [DataContract]
     [Serializable]
-    [BsonIgnoreExtraElements(Inherited = true)]
+    [BsonIgnoreExtraElements(Inherited = false)]
     public abstract class MongoEntity : BaseEntityTypeId<string>
     {
         [DataMember]

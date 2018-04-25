@@ -38,28 +38,36 @@ namespace microCommerce.Ioc
             containerBuilder.RegisterInstance(this).As<IEngine>().SingleInstance();
 
             //register assembly finder
-            var assemblyFinder = new AssemblyFinder();
-            containerBuilder.RegisterInstance(assemblyFinder).As<IAssemblyHelper>().SingleInstance();
+            var assemblyHelper = new AssemblyHelper();
+            containerBuilder.RegisterInstance(assemblyHelper).As<IAssemblyHelper>().SingleInstance();
 
             //find dependency registrars provided by other assemblies
-            var dependencyRegistrars = assemblyFinder.FindOfType<IDependencyRegistrar>();
+            var dependencyRegistrars = assemblyHelper.FindOfType<IDependencyRegistrar>();
 
             //create and sort instances of dependency registrars
             var instances = dependencyRegistrars
                 .Select(dependencyRegistrar => (IDependencyRegistrar)Activator.CreateInstance(dependencyRegistrar))
                 .OrderBy(dependencyRegistrar => dependencyRegistrar.Priority);
 
+            var dependencyConfig = new DependencyContext
+            {
+                ContainerBuilder = containerBuilder,
+                AssemblyHelper = assemblyHelper,
+                ConfigurationRoot = configuration,
+                AppConfig = config
+            };
+
             //register all provided dependencies
             foreach (var dependencyRegistrar in instances)
-                dependencyRegistrar.Register(containerBuilder, assemblyFinder, configuration, config);
-            
+                dependencyRegistrar.Register(dependencyConfig);
+
             //populate Autofac container builder with the set of registered service descriptors
             containerBuilder.Populate(services);
 
             //return service provider
             _serviceProvider = new AutofacServiceProvider(containerBuilder.Build());
 
-            var startupTasks = assemblyFinder.FindOfType<IStartupTask>();
+            var startupTasks = assemblyHelper.FindOfType<IStartupTask>();
             var taskInstances = startupTasks
                 .Select(task => (IStartupTask)Activator.CreateInstance(task))
                 .OrderBy(task => task.Priority);
@@ -89,7 +97,7 @@ namespace microCommerce.Ioc
         {
             return GetServiceProvider.GetRequiredService(type);
         }
-        
+
         /// <summary>
         /// Gets the multiple instance by generic type from ioc container
         /// </summary>
@@ -135,7 +143,13 @@ namespace microCommerce.Ioc
         }
 
         #region Properties
-        public virtual IServiceProvider ServiceProvider => _serviceProvider;
+        public virtual IServiceProvider ServiceProvider
+        {
+            get
+            {
+                return _serviceProvider;
+            }
+        }
         #endregion
     }
 }

@@ -29,7 +29,7 @@ namespace microCommerce.Common
         /// Gets a value indicating whether current connection is secured
         /// </summary>
         /// <returns>True if it's secured, otherwise false</returns>
-        bool IsCurrentConnectionSecured();
+        bool ConnectionIsSecure();
 
         /// <summary>
         /// Gets current host location

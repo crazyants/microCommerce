@@ -9,16 +9,16 @@ using microCommerce.Logging;
 using microCommerce.MongoDb;
 using microCommerce.Mvc;
 using microCommerce.Redis;
-using Microsoft.Extensions.Configuration;
 using System.Data;
 
 namespace microCommerce.DirectoryApi.Infrastructure
 {
     public class DependencyRegistrar : IDependencyRegistrar
     {
-        public void Register(ContainerBuilder builder, IAssemblyHelper assemblyHelper, IConfigurationRoot configuration, IAppConfiguration config)
+        public void Register(DependencyContext context)
         {
-            var serviceConfig = config as ServiceConfiguration;
+            var builder = context.ContainerBuilder;
+            var config = context.AppConfig as ServiceConfiguration;
             
             //web helper
             builder.RegisterType<WebHelper>().As<IWebHelper>().InstancePerLifetimeScope();
@@ -29,10 +29,10 @@ namespace microCommerce.DirectoryApi.Infrastructure
                 builder.RegisterType<PerRequestCacheManager>().As<ICacheManager>().InstancePerLifetimeScope();
 
                 //static cache manager
-                if (serviceConfig.UseRedisCaching)
+                if (config.UseRedisCaching)
                 {
                     //register redis cache manager
-                    builder.RegisterInstance(new RedisConnectionWrapper(serviceConfig.RedisConnectionString)).As<IRedisConnectionWrapper>().SingleInstance();
+                    builder.RegisterInstance(new RedisConnectionWrapper(config.RedisConnectionString)).As<IRedisConnectionWrapper>().SingleInstance();
                     builder.RegisterType<RedisCacheManager>().As<IStaticCacheManager>().InstancePerLifetimeScope();
                 }
                 //register memory cache manager
@@ -43,12 +43,12 @@ namespace microCommerce.DirectoryApi.Infrastructure
                 builder.RegisterType<NullCacheManager>().As<ICacheManager>().SingleInstance();
 
             //register logging
-            if (serviceConfig.LoggingEnabled)
+            if (config.LoggingEnabled)
             {
                 //register mongodb logging
-                if (serviceConfig.UseNoSqlLogging)
+                if (config.UseNoSqlLogging)
                 {
-                    builder.RegisterInstance(new MongoDbContext(serviceConfig.NoSqlConnectionString)).As<IMongoDbContext>().SingleInstance();
+                    builder.RegisterInstance(new MongoDbContext(config.NoSqlConnectionString)).As<IMongoDbContext>().SingleInstance();
                     builder.RegisterGeneric(typeof(MongoRepository<>)).As(typeof(IMongoRepository<>)).InstancePerLifetimeScope();
                     builder.RegisterType<MongoDbLogger>().As<ILogger>().InstancePerLifetimeScope();
                 }
@@ -59,8 +59,8 @@ namespace microCommerce.DirectoryApi.Infrastructure
                 builder.RegisterType<NullLogger>().As<ILogger>().InstancePerLifetimeScope();
 
             //register dapper data context
-            var provider = ProviderFactory.GetProvider(serviceConfig.DatabaseProviderName);
-            var connection = provider.CreateConnection(serviceConfig.ConnectionString);
+            var provider = ProviderFactory.GetProvider(config.DatabaseProviderName);
+            var connection = provider.CreateConnection(config.ConnectionString);
             builder.RegisterInstance(connection).As<IDbConnection>().SingleInstance();
             builder.RegisterInstance(provider).As<IDataProvider>().SingleInstance();
             builder.RegisterInstance(new DataContext(provider, connection)).As<IDataContext>().SingleInstance();            
