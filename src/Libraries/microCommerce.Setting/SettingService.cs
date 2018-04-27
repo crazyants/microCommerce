@@ -1,6 +1,7 @@
 ﻿using microCommerce.Caching;
 using microCommerce.Common;
 using microCommerce.MongoDb;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,7 +37,7 @@ namespace microCommerce.Setting
         [Serializable]
         public class SettingForCaching
         {
-            public string Id { get; set; }
+            public ObjectId Id { get; set; }
             public string Name { get; set; }
             public string Value { get; set; }
         }
@@ -128,9 +129,9 @@ namespace microCommerce.Setting
         #endregion
 
         #region Methods
-        public virtual async Task<Setting> GetSettingById(string Id)
+        public virtual async Task<Setting> GetSettingById(object Id)
         {
-            if (string.IsNullOrEmpty(Id))
+            if (Id ==null)
                 return null;
 
             return await _settingRepository.FindAsync(Id);

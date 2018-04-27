@@ -6,13 +6,13 @@ using System.Runtime.Serialization;
 
 namespace microCommerce.MongoDb
 {
-    [DataContract]
-    [Serializable]
-    [BsonIgnoreExtraElements(Inherited = false)]
-    public abstract class MongoEntity : BaseEntityTypeId<string>
+    //[DataContract]
+    //[Serializable]
+    //[BsonIgnoreExtraElements(Inherited = false)]
+    public abstract class MongoEntity : BaseEntityTypeId<ObjectId>
     {
-        [DataMember]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public override string Id { get; set; }
+        //[DataMember]
+        //[BsonRepresentation(BsonType.ObjectId)]
+        public override ObjectId Id { get; set; }
     }
 }

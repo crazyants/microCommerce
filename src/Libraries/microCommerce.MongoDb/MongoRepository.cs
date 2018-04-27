@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
@@ -81,7 +82,7 @@ namespace microCommerce.MongoDb
         /// <returns></returns>
         public T Find(object Id)
         {
-            return Document.Find(x => x.Id == (Id as string)).FirstOrDefault();
+            return Document.Find(x => x.Id == (ObjectId)Id).FirstOrDefault();
         }
 
         /// <summary>
@@ -242,7 +243,7 @@ namespace microCommerce.MongoDb
         #region Get Async
         public virtual async Task<T> FindAsync(object Id)
         {
-            return await Document.Find(x => x.Id == (Id as string)).FirstOrDefaultAsync();
+            return await Document.Find(x => x.Id == (ObjectId)Id).FirstOrDefaultAsync();
         }
 
         public virtual async Task<T> FindAsync(Expression<Func<T, bool>> filter)

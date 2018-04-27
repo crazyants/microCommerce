@@ -15,8 +15,8 @@ namespace microCommerce.Web.Controllers
 
         public IActionResult Index()
         {
-            _localizationService.InsertLocalizationResource("Customer.Login", "Giriş Yap", "tr-TR");
-            _localizationService.InsertLocalizationResource("Customer.Register", "Hesap Oluştur", "tr-TR");
+            //_localizationService.InsertLocalizationResource("Customer.Login", "Giriş Yap", "tr-TR");
+            //_localizationService.InsertLocalizationResource("Customer.Register", "Hesap Oluştur", "tr-TR");
 
             return View();
         }

@@ -2,7 +2,6 @@
 using Autofac.Extensions.DependencyInjection;
 using microCommerce.Common;
 using microCommerce.Common.Configurations;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -17,15 +16,12 @@ namespace microCommerce.Ioc
         private IServiceProvider _serviceProvider { get; set; }
         #endregion
 
-        #region Utilities
-        protected virtual IServiceProvider GetServiceProvider
+        #region Properties
+        public virtual IServiceProvider ServiceProvider
         {
             get
             {
-                var accessor = ServiceProvider.GetService<IHttpContextAccessor>();
-                var context = accessor.HttpContext;
-
-                return context != null ? context.RequestServices : ServiceProvider;
+                return  _serviceProvider;
             }
         }
         #endregion
@@ -64,7 +60,7 @@ namespace microCommerce.Ioc
             //populate Autofac container builder with the set of registered service descriptors
             containerBuilder.Populate(services);
 
-            //return service provider
+            //create service provider
             _serviceProvider = new AutofacServiceProvider(containerBuilder.Build());
 
             var startupTasks = assemblyHelper.FindOfType<IStartupTask>();
@@ -85,7 +81,7 @@ namespace microCommerce.Ioc
         /// <returns></returns>
         public virtual T Resolve<T>() where T : class
         {
-            return GetServiceProvider.GetRequiredService(typeof(T)) as T;
+            return ServiceProvider.GetRequiredService(typeof(T)) as T;
         }
 
         /// <summary>
@@ -95,7 +91,7 @@ namespace microCommerce.Ioc
         /// <returns></returns>
         public virtual object Resolve(Type type)
         {
-            return GetServiceProvider.GetRequiredService(type);
+            return ServiceProvider.GetRequiredService(type);
         }
 
         /// <summary>
@@ -105,7 +101,7 @@ namespace microCommerce.Ioc
         /// <returns></returns>
         public virtual IEnumerable<T> ResolveAll<T>()
         {
-            return GetServiceProvider.GetServices(typeof(T)) as IEnumerable<T>;
+            return ServiceProvider.GetServices(typeof(T)) as IEnumerable<T>;
         }
 
         /// <summary>
@@ -141,15 +137,5 @@ namespace microCommerce.Ioc
 
             throw new CustomException("No constructor was found that had all the dependencies satisfied.", innerException);
         }
-
-        #region Properties
-        public virtual IServiceProvider ServiceProvider
-        {
-            get
-            {
-                return _serviceProvider;
-            }
-        }
-        #endregion
     }
 }

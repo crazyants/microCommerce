@@ -7,7 +7,7 @@ namespace microCommerce.Setting
 {
     public interface ISettingService
     {
-        Task<Setting> GetSettingById(string Id);
+        Task<Setting> GetSettingById(object Id);
         Task<Setting> GetSetting(string key);
         Task<T> GetSettingByKey<T>(string key, T defaultValue = default(T));
         Task<T> GetSetting<T>() where T : ISettings, new();

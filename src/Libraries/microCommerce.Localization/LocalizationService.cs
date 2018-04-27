@@ -1,6 +1,7 @@
 using microCommerce.Caching;
 using microCommerce.Common;
 using microCommerce.MongoDb;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,7 +29,7 @@ namespace microCommerce.Localization
 
             var localizationResource = new LocalizationResource
             {
-                Name = name,
+                Name = name.Trim().ToLowerInvariant(),
                 Value = value,
                 LanguageCultureCode = languageCultureCode
             };
@@ -84,7 +85,8 @@ namespace microCommerce.Localization
             string cacheKey = string.Format("localization.resource.{0}.{1}", name, languageCultureCode);
             var localizationResource = _cacheManager.Get(cacheKey, () =>
             {
-                return _localizationResourceRepository.FindAsync(lr => lr.Name == name && lr.LanguageCultureCode == languageCultureCode).Result;
+                return _localizationResourceRepository.Find(lr => lr.Name.Equals(name) &&
+                lr.LanguageCultureCode.Equals(languageCultureCode));
             });
 
             if (localizationResource != null)
